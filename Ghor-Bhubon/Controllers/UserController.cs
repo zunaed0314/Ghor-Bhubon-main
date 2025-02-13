@@ -64,7 +64,8 @@ namespace Ghor_Bhubon.Controllers
 
             if (user != null)
             {
-                
+                HttpContext.Session.SetInt32("UserID", user.UserID);
+
                 switch (user.Role)
                 {
                     case UserRole.Tenant:

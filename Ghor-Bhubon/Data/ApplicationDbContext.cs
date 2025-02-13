@@ -17,10 +17,9 @@ namespace Ghor_Bhubon.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Set precision and scale for Rent property
             modelBuilder.Entity<Flat>()
                 .Property(f => f.Rent)
-                .HasColumnType("decimal(18,2)"); // Specify the precision and scale
+                .HasColumnType("decimal(18,2)"); 
         }
     }
 }

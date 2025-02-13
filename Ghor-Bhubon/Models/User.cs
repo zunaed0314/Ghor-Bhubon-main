@@ -33,9 +33,9 @@ namespace Ghor_Bhubon.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime? Birthdate { get; set; } 
+        //[Required]
+        //[DataType(DataType.Date)]
+        //public DateTime? Birthdate { get; set; } 
 
         [Required]
         public string Gender { get; set; }
