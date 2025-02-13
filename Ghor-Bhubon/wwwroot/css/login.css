@@ -1,0 +1,74 @@
+﻿/* Reset general margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 5vh 8vw;
+    border-radius: 2vw;
+    box-shadow: 0 0.5vw 2vw rgba(0, 0, 0, 0.1);
+    width: 35vw;
+}
+
+h1 {
+    margin-bottom: 3vh;
+    font-size: 4vw;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 4vh;
+    text-align: left;
+    width: 100%;
+}
+
+label {
+    font-size: 2.5vw;
+    color: #333;
+    margin-bottom: 1vh;
+    display: block;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 2vh;
+    font-size: 2vw;
+    border-radius: 1vw;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 2vh 5vw;
+    font-size: 2.5vw;
+    border-radius: 1vw;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #007bff;
+}

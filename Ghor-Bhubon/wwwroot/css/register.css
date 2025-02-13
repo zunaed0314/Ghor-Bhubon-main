@@ -1,0 +1,93 @@
+﻿/* General reset for padding and margin */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: seashell;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 99vh;
+    margin: 0;
+}
+
+.register-container {
+    width: 60vw; /* Make it wider */
+    max-width: 700px; /* To avoid being too wide on very large screens */
+    background-color: #ffffff;
+    padding: 3vh 4vw;
+    border-radius: 1vw;
+    box-shadow: 0 0.5vw 1.5vw rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h2 {
+    font-size: 3.2vw;
+    margin-bottom: 3vh;
+    color: #333;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3vh;
+}
+
+.form-group {
+    width: 48%; /* Make it 48% to give a bit of breathing space */
+    text-align: left;
+}
+
+label {
+    font-size: 2vw;
+    color: #333;
+    margin-bottom: 1vh;
+    display: block;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 1.5vh;
+    font-size: 1.8vw;
+    border-radius: 0.8vw;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 2vh 5vw;
+    font-size: 2.2vw;
+    border-radius: 1vw;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.gender-options {
+    display: flex;
+    justify-content: space-between;
+    margin-right:3vw;
+    margin-top: 2vh;
+    margin-bottom: 3vh;
+}
+
+    .gender-options input {
+        width: auto;
+        
+    }

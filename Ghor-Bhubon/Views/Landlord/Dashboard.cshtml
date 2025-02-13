@@ -1,0 +1,11 @@
+﻿<!-- Views/Landlord/Dashboard.cshtml -->
+@{
+    ViewData["Title"] = "Landlord Dashboard";
+}
+
+<h2>Landlord Dashboard</h2>
+
+<div>
+    <button><a href="@Url.Action("AddProperty", "Landlord")">Add Property</a></button>
+    <button><a href="@Url.Action("Logout", "Landlord")">Logout</a></button>
+</div>
