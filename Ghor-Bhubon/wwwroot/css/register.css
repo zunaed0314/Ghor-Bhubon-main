@@ -1,93 +1,127 @@
-﻿/* General reset for padding and margin */
-* {
+﻿/* General Styling */
+body {
+    background: linear-gradient(to right, #8360c3, #2ebf91); /* Gradient background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: seashell;
     display: flex;
     justify-content: center;
     align-items: center;
-    max-height: 99vh;
-    margin: 0;
+    min-height: 100vh; /* Ensure the page takes full height */
 }
 
-.register-container {
-    width: 60vw; /* Make it wider */
-    max-width: 700px; /* To avoid being too wide on very large screens */
-    background-color: #ffffff;
-    padding: 3vh 4vw;
-    border-radius: 1vw;
-    box-shadow: 0 0.5vw 1.5vw rgba(0, 0, 0, 0.1);
+/* Container for the form */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+/* The registration card */
+.login-card {
+    width: 800px; /* Increase the width for a wider form */
+    padding: 30px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     text-align: center;
+    box-sizing: border-box;
+    margin: 20px;
 }
 
+/* Title styling */
 h2 {
-    font-size: 3.2vw;
-    margin-bottom: 3vh;
     color: #333;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
+/* Layout for two-column */
 .form-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 3vh;
+    gap: 20px;
 }
 
 .form-group {
-    width: 48%; /* Make it 48% to give a bit of breathing space */
+    width: 48%; /* Each form group takes up half of the available width */
+    margin-bottom: 20px;
     text-align: left;
 }
 
-label {
-    font-size: 2vw;
-    color: #333;
-    margin-bottom: 1vh;
-    display: block;
-}
-
-input,
-select {
+.form-control {
     width: 100%;
-    padding: 1.5vh;
-    font-size: 1.8vw;
-    border-radius: 0.8vw;
-    border: 1px solid #ccc;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
 }
 
-button {
-    background-color: #007bff;
+    .form-control:focus {
+        border-color: #2ebf91;
+        box-shadow: 0 0 10px rgba(46, 191, 145, 0.3); /* Light shadow on focus */
+    }
+
+/* Button styling */
+.btn-primary {
+    background-color: #2ebf91;
     color: white;
-    padding: 2vh 5vw;
-    font-size: 2.2vw;
-    border-radius: 1vw;
+    border: none;
+    padding: 14px;
     width: 100%;
+    border-radius: 10px;
+    font-size: 18px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
-    button:hover {
-        background-color: #0056b3;
+    .btn-primary:hover {
+        background-color: #1e9e77;
+        transform: translateY(-3px); /* Button hover effect */
     }
 
-input:focus,
-select:focus {
-    outline: none;
-    border-color: #007bff;
+/* Login link */
+.login-link {
+    margin-top: 20px;
+    font-size: 14px;
 }
 
-.gender-options {
-    display: flex;
-    justify-content: space-between;
-    margin-right:3vw;
-    margin-top: 2vh;
-    margin-bottom: 3vh;
-}
-
-    .gender-options input {
-        width: auto;
-        
+    .login-link a {
+        color: #2ebf91;
+        text-decoration: none;
+        font-weight: bold;
     }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .login-card {
+        padding: 20px; /* Reduce padding on smaller screens */
+        width: 90%; /* Use a smaller width on mobile */
+    }
+
+    h2 {
+        font-size: 24px; /* Smaller heading size */
+    }
+
+    .form-row {
+        flex-direction: column; /* Stack form fields vertically on small screens */
+        gap: 15px;
+    }
+
+    .form-group {
+        width: 100%; /* Form groups take full width on mobile */
+    }
+
+    .btn-primary {
+        font-size: 16px; /* Adjust button font size */
+    }
+}

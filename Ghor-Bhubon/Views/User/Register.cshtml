@@ -6,69 +6,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="~/css/register.css">
+    <link rel="stylesheet" href="~/css/register.css" asp-append-version="true">
 </head>
 <body>
 
-    <div class="register-container">
-        <h2>Register</h2>
-
-        <form asp-action="Register" method="post" enctype="multipart/form-data">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="Role">Role:</label>
-                    <select asp-for="Role" class="form-control" required>
-                        <option value="Landlord">Landlord</option>
-                        <option value="Tenant">Tenant</option>
-                        <option value="Admin">Admin</option>
-                    </select>
+    <div class="login-container">
+        <div class="login-card">
+            <h2>Create an Account</h2>
+            <form asp-action="Register" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="FirstName">First Name</label>
+                        <input type="text" name="FirstName" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="LastName">Last Name</label>
+                        <input type="text" name="LastName" class="form-control" required />
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="FirstName">First Name:</label>
-                    <input asp-for="FirstName" class="form-control" required />
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="LastName">Last Name:</label>
-                    <input asp-for="LastName" class="form-control" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="PhoneNumber">Phone Number:</label>
-                    <input asp-for="PhoneNumber" class="form-control" required />
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="Email">Email:</label>
-                    <input asp-for="Email" type="email" class="form-control" required />
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="Email">Email Address</label>
+                        <input type="email" name="Email" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="Phone">Phone Number</label>
+                        <input type="tel" name="Phone" class="form-control" required />
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="PasswordHash">Password:</label>
-                    <input asp-for="PasswordHash" type="password" class="form-control" required />
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="Role">I am a</label>
+                        <select name="Role" class="form-control" required>
+                            <option value="">Select Role</option>
+                            <option value="Landlord">Landlord</option>
+                            <option value="Tenant">Tenant</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="ConfirmPassword">Confirm Password:</label>
-                <input type="password" name="ConfirmPassword" class="form-control" required />
-            </div>
-
-            <div class="form-group">
-                <label for="Gender">Gender:</label>
-                <div class="gender-options">
-                    <input type="radio" asp-for="Gender" value="Male" required /> Male <br>
-                    <input type="radio" asp-for="Gender" value="Female" required /> Female
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="PasswordHash">Password</label>
+                        <input type="password" name="PasswordHash" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="ConfirmPassword">Confirm Password</label>
+                        <input type="password" name="confirmPassword" class="form-control" required />
+                    </div>
                 </div>
-            </div>
 
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
+                <button type="submit" class="btn-primary">Register</button>
+
+                <div class="login-link">
+                    <p>Already have an account? <a href="@Url.Action("Login", "User")">Login</a></p>
+                </div>
+            </form>
+        </div>
     </div>
 
 </body>

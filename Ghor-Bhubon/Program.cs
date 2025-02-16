@@ -1,4 +1,5 @@
 // Program.cs
+using Ghor_Bhubon.Controllers;
 using Ghor_Bhubon.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,12 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 
 var app = builder.Build();
-
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var userController = new UserController(dbContext);
+    userController.SeedAdminUser();
+}
 // Use routing, authentication, authorization, etc.
 if (!app.Environment.IsDevelopment())
 {
@@ -37,3 +43,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+

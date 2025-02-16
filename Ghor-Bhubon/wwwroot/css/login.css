@@ -1,74 +1,47 @@
-﻿/* Reset general margin and padding */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+﻿/* Center login form */
+.login-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    height: 80vh;
 }
 
-.login-container {
+/* Card styling */
+.login-card {
+    background: #fff;
+    padding: 30px;
+    width: 350px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
     text-align: center;
-    background-color: #ffffff;
-    padding: 5vh 8vw;
-    border-radius: 2vw;
-    box-shadow: 0 0.5vw 2vw rgba(0, 0, 0, 0.1);
-    width: 35vw;
 }
 
-h1 {
-    margin-bottom: 3vh;
-    font-size: 4vw;
-    color: #333;
-}
-
-.form-group {
-    margin-bottom: 4vh;
-    text-align: left;
+/* Input and select styling */
+.form-control {
     width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-label {
-    font-size: 2.5vw;
-    color: #333;
-    margin-bottom: 1vh;
-    display: block;
-}
-
-input,
-select {
+/* Button styling */
+.btn-primary {
+    background-color: #0072ff;
+    border: none;
+    padding: 10px;
     width: 100%;
-    padding: 2vh;
-    font-size: 2vw;
-    border-radius: 1vw;
-    border: 1px solid #ccc;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
 }
 
-button {
-    background-color: #007bff;
-    color: white;
-    padding: 2vh 5vw;
-    font-size: 2.5vw;
-    border-radius: 1vw;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-    button:hover {
+    .btn-primary:hover {
         background-color: #0056b3;
     }
 
-input:focus,
-select:focus {
-    outline: none;
-    border-color: #007bff;
+/* Register link */
+p {
+    font-size: 14px;
 }

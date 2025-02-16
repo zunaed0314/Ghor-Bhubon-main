@@ -2,21 +2,11 @@
     ViewData["Title"] = "Home";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Welcome to GhorBhubon</h1>
-        <div class="options">
-            <a href="@Url.Action("Login", "User")" class="btn">Login</a>
-            <a href="@Url.Action("Register", "User")" class="btn">Register</a>
-        </div>
+<div class="welcome-container">
+    <div class="welcome-card">
+        <i class="fas fa-book"></i>
+        <h2>Welcome to GhorBhubon</h2>
+        <a href="@Url.Action("Login", "User")" class="btn btn-primary">Login</a>
+        <a href="@Url.Action("Register", "User")" class="btn btn-success">Register</a>
     </div>
-</body>
-</html>
+</div>
