@@ -4,6 +4,12 @@
     margin: 0;
     padding: 0;
     min-height: 100vh;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 40%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    
 }
 
 h2 {
@@ -45,15 +51,16 @@ textarea {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #007bff; /* Blue color */
     color: white;
-    padding: 2vh 4vw; /* Padding in vh and vw */
     border: none;
-    border-radius: 1vw; /* Border radius in vw */
-    font-size: 2vw; /* Font size in vw */
-    width: 100%;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
     cursor: pointer;
-    margin-top: 3vh; /* Margin top in vh */
+    width: 100%;
+    display: block;
+    text-align: center;
 }
 
     button:hover {

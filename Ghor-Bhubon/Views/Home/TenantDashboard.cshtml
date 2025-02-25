@@ -1,5 +1,326 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewBag.Title = "Tenant View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .container {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .navbar {
+        border-bottom: 1px solid #ddd;
+        padding: 0.5rem 1rem;
+        background-color: #8ccbf1;
+    }
+
+    .navbar-nav .nav-link {
+        color: #f9f9f9 !important;
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+        .navbar-brand img {
+            height: 30px;
+            margin-right: 10px;
+        }
+
+    .nav-link {
+        color: #000 !important;
+        font-weight: 500;
+    }
+
+    .action-buttons button {
+        margin-left: 10px;
+    }
+
+    .categories {
+        display: flex;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        background-color: #f9f9f9;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+    }
+
+        .categories .category-btn {
+            margin: 0 5px;
+            font-weight: 500;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background-color: #fff;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+            .categories .category-btn:hover {
+                background-color: #e9ecef;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+    footer {
+        background-color: #8ccbf1;
+        color: #ffffff;
+        padding: 20px 0;
+    }
+
+    .footer-links a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+    .property-card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+    }
+
+        .property-card:hover {
+            transform: scale(1.02);
+        }
+
+    .property-image {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .filters {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<body>
+    <!-- Header and Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-lg ">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand" href="#">
+
+                    GHOR BHUBON
+                </a>
+
+                <!-- Navbar Toggler -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar Links -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Property List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Saved Property</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Article</a>
+                        </li>
+                    </ul>
+
+
+
+                </div>
+            </div>
+        </nav>
+        <!-- Categories Section -->
+        <div class="categories">
+            <button class="category-btn">Family</button>
+            <button class="category-btn">Bachelor</button>
+            <button class="category-btn">Office</button>
+            <button class="category-btn">Sublet</button>
+            <button class="category-btn">Hostel</button>
+            <button class="category-btn">Shop</button>
+        </div>
+    </header>
+
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <div class="row mb-4">
+            <div class="col-lg-3">
+                <div class="filters">
+                    <h5>Filters</h5>
+                    <div class="mb-3">
+                        <label for="locationFilter" class="form-label">Location</label>
+                        <input type="text" id="locationFilter" class="form-control" placeholder="Enter location">
+                    </div>
+                    <div class="mb-3">
+                        <label for="priceFilter" class="form-label">Price Range</label>
+                        <select id="priceFilter" class="form-select">
+                            <option value="">All</option>
+                            <option value="0-1000">$0 - $1,000</option>
+                            <option value="1000-2000">$1,000 - $2,000</option>
+                            <option value="2000+">$2,000+</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="typeFilter" class="form-label">Property Type</label>
+                        <select id="typeFilter" class="form-select">
+                            <option value="">All</option>
+                            <option value="apartment">Apartment</option>
+                            <option value="house">House</option>
+                            <option value="studio">Studio</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary w-100" onclick="applyFilters()">Apply Filters</button>
+                </div>
+            </div>
+            <div class="col-lg-9">
+
+                <div class="row" id="propertyGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-3">
+                    <h5>About Ghor Bhubon</h5>
+                    <p>Ghor Bhubon is a platform that connects home renters and landlords for seamless property renting. Explore properties and manage your listings with ease!</p>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Renters</a></li>
+                        <li><a href="#">Landlords</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <h5>Contact Us</h5>
+                    <p>Email: support@rentease.com</p>
+                    <p>Phone: +123 456 7890</p>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>&copy; 2025 RentEase. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+         // Sample Data for Properties
+         const properties = [
+            { id: 1, image: "property image/1.jpg", title: "Luxury Apartment", location: "New York", price: "$2,500/month", type: "apartment", bedrooms: 2, bathrooms: 1 },
+            { id: 2, image: "property image/2.jpg", title: "Cozy Studio", location: "San Francisco", price: "$1,200/month", type: "studio", bedrooms: 1, bathrooms: 1 },
+            { id: 3, image: "property image/3.jpg", title: "Family Home", location: "Los Angeles", price: "$3,000/month", type: "house", bedrooms: 3, bathrooms: 2 },
+            { id: 1, image: "property image/1.jpg", title: "Luxury Apartment", location: "New York", price: "$2,500/month", type: "apartment", bedrooms: 2, bathrooms: 1 },
+            { id: 2, image: "property image/2.jpg", title: "Cozy Studio", location: "San Francisco", price: "$1,200/month", type: "studio", bedrooms: 1, bathrooms: 1 },
+            { id: 3, image: "property image/3.jpg", title: "Family Home", location: "Los Angeles", price: "$3,000/month", type: "house", bedrooms: 3, bathrooms: 2 },
+            { id: 1, image: "property image/1.jpg", title: "Luxury Apartment", location: "New York", price: "$2,500/month", type: "apartment", bedrooms: 2, bathrooms: 1 },
+            { id: 2, image: "property image/2.jpg", title: "Cozy Studio", location: "San Francisco", price: "$1,200/month", type: "studio", bedrooms: 1, bathrooms: 1 },
+            { id: 3, image: "property image/3.jpg", title: "Family Home", location: "Los Angeles", price: "$3,000/month", type: "house", bedrooms: 3, bathrooms: 2 },
+            { id: 1, image: "property image/1.jpg", title: "Luxury Apartment", location: "New York", price: "$2,500/month", type: "apartment", bedrooms: 2, bathrooms: 1 },
+            { id: 2, image: "property image/2.jpg", title: "Cozy Studio", location: "San Francisco", price: "$1,200/month", type: "studio", bedrooms: 1, bathrooms: 1 },
+            { id: 3, image: "property image/3.jpg", title: "Family Home", location: "Los Angeles", price: "$3,000/month", type: "house", bedrooms: 3, bathrooms: 2 },
+            { id: 1, image: "property image/1.jpg", title: "Luxury Apartment", location: "New York", price: "$2,500/month", type: "apartment", bedrooms: 2, bathrooms: 1 },
+            { id: 2, image: "property image/2.jpg", title: "Cozy Studio", location: "San Francisco", price: "$1,200/month", type: "studio", bedrooms: 1, bathrooms: 1 },
+            { id: 3, image: "property image/3.jpg", title: "Family Home", location: "Los Angeles", price: "$3,000/month", type: "house", bedrooms: 3, bathrooms: 2 },
+            // Add more properties as needed
+        ];
+
+        let currentPage = 1;
+        const itemsPerPage = 18;
+
+        // Render Properties
+        function renderProperties(data) {
+            const propertyGrid = document.getElementById("propertyGrid");
+            propertyGrid.innerHTML = data.map(property => `
+                <div class="col-md-4 mb-4">
+                    <div class="card property-card">
+                        <img src="${property.image}" class="card-img-top property-image" alt="Property Image">
+                        <div class="card-body">
+                            <h5 class="card-title">${property.title}</h5>
+                            <p class="card-text">${property.location}<br>${property.price}</p>
+                            <button class="btn btn-primary w-100" onclick="viewDetails(${property.id})">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Pagination Logic
+        function paginateProperties() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            renderProperties(properties.slice(startIndex, endIndex));
+        }
+
+        function nextPage() {
+            if ((currentPage * itemsPerPage) < properties.length) {
+                currentPage++;
+                paginateProperties();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                paginateProperties();
+            }
+        }
+
+        // Filters
+        function applyFilters() {
+            const locationFilter = document.getElementById("locationFilter").value.toLowerCase();
+            const priceFilter = document.getElementById("priceFilter").value;
+            const typeFilter = document.getElementById("typeFilter").value;
+
+            const filtered = properties.filter(property => {
+                const matchesLocation = locationFilter === "" || property.location.toLowerCase().includes(locationFilter);
+                const matchesType = typeFilter === "" || property.type === typeFilter;
+                const matchesPrice = priceFilter === "" || (
+                    priceFilter === "0-1000" && parseInt(property.price.replace(/\D/g, '')) <= 1000 ||
+                    priceFilter === "1000-2000" && parseInt(property.price.replace(/\D/g, '')) <= 2000 ||
+                    priceFilter === "2000+" && parseInt(property.price.replace(/\D/g, '')) > 2000
+                );
+
+                return matchesLocation && matchesType && matchesPrice;
+            });
+
+            renderProperties(filtered);
+        }
+
+        // View Details Modal
+        function viewDetails(id) {
+            const property = properties.find(p => p.id === id);
+            document.getElementById("propertyModalTitle").innerText = property.title;
+            document.getElementById("propertyModalImage").src = property.image;
+            document.getElementById("propertyModalDetails").innerText = `
+                Location: ${property.location}
+                Price: ${property.price}
+                Type: ${property.type}
+                Bedrooms: ${property.bedrooms}
+                Bathrooms: ${property.bathrooms}
+            `;
+            const modal = new bootstrap.Modal(document.getElementById("propertyModal"));
+            modal.show();
+        }
+
+        paginateProperties();
+    </script>
+</body>
