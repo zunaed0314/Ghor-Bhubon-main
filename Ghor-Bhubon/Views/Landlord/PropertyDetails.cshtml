@@ -1,0 +1,29 @@
+﻿@model Ghor_Bhubon.Models.Flat
+
+<h2>Property Details</h2>
+
+@if (Model != null)
+{
+    <div class="property-detail">
+        <h3>@Model.Location</h3>
+        <p><strong>Rent:</strong> @Model.Rent TK</p>
+        <p><strong>Rooms:</strong> @Model.NumberOfRooms | <strong>Bathrooms:</strong> @Model.NumberOfBathrooms</p>
+        <p><strong>Description:</strong> @Model.Description</p>
+
+        <p><strong>Image Paths:</strong> @Model.ImagePaths</p> <!-- Debugging -->
+        @if (!string.IsNullOrEmpty(Model.ImagePaths))
+        {
+            var images = Model.ImagePaths.Split(",");
+            <div class="property-images">
+                @foreach (var image in images)
+                {
+                    <img src="@image.Trim()" alt="Property Image" class="property-image" />
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Property not found.</p>
+}

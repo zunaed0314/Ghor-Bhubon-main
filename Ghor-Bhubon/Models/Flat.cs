@@ -1,8 +1,7 @@
-﻿// Models/Flat.cs
-using System;
-using Microsoft.AspNetCore.Http;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ghor_Bhubon.Models
 {
@@ -11,7 +10,7 @@ namespace Ghor_Bhubon.Models
         [Key]
         public int FlatID { get; set; }
 
-        public int UserID { get; set; }  
+        public int UserID { get; set; }
 
         [Required]
         public decimal Rent { get; set; }
@@ -28,8 +27,14 @@ namespace Ghor_Bhubon.Models
         [Required]
         public int NumberOfBathrooms { get; set; }
 
-        public string Availability { get; set; } = "Available"; 
+        public string Availability { get; set; } = "Available";
 
-        //public List<string> ImagePaths { get; set; } = new List<string>(); 
+        public string? ImagePaths { get; set; } // Store multiple image paths as a comma-separated string
+
+        [NotMapped]
+        public List<string> ImagePathList
+        {
+            get => string.IsNullOrEmpty(ImagePaths) ? new List<string>() : ImagePaths.Split(',').ToList();
+        }
     }
 }

@@ -38,8 +38,25 @@
             <input asp-for="NumberOfBathrooms" class="form-control" type="number" required />
         </div>
 
+        <!-- Custom Image Upload Section -->
+        <div class="form-group">
+            <label>Upload Images:</label>
+            <div class="upload-container">
+                <!-- Squircle Button -->
+                <div class="upload-btn" onclick="document.getElementById('imageInput').click();">
+                    <span>+</span>
+                </div>
+                <input type="file" id="imageInput" name="Images" accept="image/*" multiple hidden>
+            </div>
+
+            <!-- Image Grid Container -->
+            <div class="image-container" id="imageContainer"></div>
+        </div>
+
         <button type="submit" class="btn btn-primary">Add Property</button>
     </form>
+
+    <script src="~/js/imageUpload.js"></script>
 
 </body>
 </html>

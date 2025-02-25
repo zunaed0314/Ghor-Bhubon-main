@@ -1,48 +1,155 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
+﻿/* General Styling for Links */
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-word; /* Fixed word break for responsiveness */
 }
 
+/* Global Link Style */
 a {
-  color: #0077cc;
+    color: #0077cc;
+    text-decoration: none;
 }
 
+    a:hover {
+        color: #005fa3; /* Hover effect */
+    }
+
+/* Button Styling */
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    .btn-primary:hover {
+        background-color: #155a8a;
+    }
+
+/* Active Link Styling for Pills */
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
+/* Border Styling */
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
+/* Box Shadow for Cards/Elements */
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+/* Footer */
+footer.footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    line-height: 60px;
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    text-align: center;
+    color: #6c757d;
+    border-top: 1px solid #e5e5e5;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+/* Layout Adjustments */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 1vh;
+}
+
+main {
+    flex-grow: 1;
+    padding: 20px; /* Add padding to ensure space around content */
+}
+
+/* For Navbar Layout */
+.navbar {
+    margin-bottom: 1rem; /* Adds space below the navbar */
+}
+
+.navbar-toggler-icon {
+    background-color: #0077cc; /* Change color for the hamburger menu */
+}
+
+/* Ensures proper handling of large text on navbar */
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+/* Centering Content on Login/Register Page */
+.content-container {
+    height: 80vh; /* Make it take up most of the screen height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+/* Welcome Message Styling */
+.welcome-message {
+    font-size: 2rem;
+    color: #0077cc;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Button Styling for Login and Register */
+.btn-custom {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    margin: 10px;
+    transition: background-color 0.3s, transform 0.3s ease;
+}
+
+    .btn-custom:hover {
+        background-color: #155a8a;
+        transform: translateY(-3px); /* Button hover effect */
+    }
+
+    .btn-custom:focus {
+        outline: none; /* Remove focus outline */
+        box-shadow: 0 0 0 0.25rem rgba(66, 153, 225, 0.5);
+    }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+
+    .btn-custom {
+        width: 100%; /* Make buttons full width on small screens */
+    }
+
+    /* Improve responsiveness of navbar links */
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .navbar-collapse {
+        margin-top: 1rem;
+    }
 }

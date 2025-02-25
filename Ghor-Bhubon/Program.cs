@@ -1,4 +1,4 @@
-// Program.cs
+using Ghor_Bhubon.Controllers;
 using Ghor_Bhubon.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +12,24 @@ builder.Services.AddControllersWithViews();
 
 // Enable session management
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // You can adjust the session timeout as needed
+    options.Cookie.HttpOnly = true; // Makes session cookies more secure
+    options.Cookie.IsEssential = true; // Required for session in non-secure browsers
+});
 
 var app = builder.Build();
 
-// Use routing, authentication, authorization, etc.
+// Ensure the admin user is seeded on application startup
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var userController = new UserController(dbContext);
+    userController.SeedAdminUser();
+}
+
+// Configure middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
