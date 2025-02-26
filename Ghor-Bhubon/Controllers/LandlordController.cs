@@ -40,7 +40,7 @@ namespace Ghor_Bhubon.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProperty(Flat flat, List<IFormFile> Images)
+        public IActionResult AddProperty(Flat flat, string uploadedImages)
         {
             if (ModelState.IsValid)
             {
@@ -50,48 +50,10 @@ namespace Ghor_Bhubon.Controllers
                 {
                     flat.UserID = userId.Value;
 
-                    List<string> imagePaths = new List<string>();
+                    // Store multiple file paths (sent from JavaScript via hidden input)
+                    flat.ImagePaths = uploadedImages;
+                    Console.WriteLine("Stored Image Paths: " + flat.ImagePaths); // Debugging
 
-                    if (Images != null && Images.Count > 0)
-                    {
-                        // List to store paths of all uploaded files
-                        var filePaths = new List<string>();
-
-                        string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-
-                        // Ensure the upload folder exists
-                        if (!Directory.Exists(uploadFolder))
-                        {
-                            Directory.CreateDirectory(uploadFolder);
-                        }
-
-                        // Loop through each uploaded image
-                        foreach (var image in Images)
-                        {
-                            if (image.Length > 0)
-                            {
-                                // Generate a unique file name for each image
-                                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(image.FileName);
-                                string filePath = Path.Combine(uploadFolder, uniqueFileName);
-
-                                // Save the image file to the server
-                                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                                {
-                                    image.CopyTo(fileStream);
-                                }
-
-                                // Add the relative file path to the list
-                                filePaths.Add(Path.Combine("/uploads/", uniqueFileName));
-                            }
-                        }
-
-                        // Join the file paths into a comma-separated string
-                        flat.ImagePaths = string.Join(",", filePaths);
-                        Console.WriteLine("Final Image Paths: " + flat.ImagePaths); // Debugging
-                    }
-
-
-                    // Add the flat property to the database and save changes
                     _context.Flats.Add(flat);
                     _context.SaveChanges();
 
@@ -103,6 +65,38 @@ namespace Ghor_Bhubon.Controllers
 
             return View(flat);
         }
+
+        [HttpPost]
+        public IActionResult AddSingleImage(IFormFile Image)
+        {
+            if (Image != null && Image.Length > 0)
+            {
+                string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+
+                // Ensure the upload folder exists
+                if (!Directory.Exists(uploadFolder))
+                {
+                    Directory.CreateDirectory(uploadFolder);
+                }
+
+                // Generate a unique file name
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(Image.FileName);
+                string filePath = Path.Combine(uploadFolder, uniqueFileName);
+
+                // Save the image file
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    Image.CopyTo(fileStream);
+                }
+
+                // Return JSON response with the image path
+                return Json(new { success = true, imagePath = "/uploads/" + uniqueFileName });
+            }
+
+            return Json(new { success = false, error = "Invalid file upload" });
+        }
+
+
 
 
         public IActionResult PropertyDetails(int id)

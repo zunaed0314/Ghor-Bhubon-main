@@ -1,6 +1,6 @@
 ﻿.property-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 3 equal columns */
+    grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
     grid-auto-rows: auto; /* Rows adjust automatically */
     gap: 20px; /* Spacing between grid items */
     padding: 20px;
