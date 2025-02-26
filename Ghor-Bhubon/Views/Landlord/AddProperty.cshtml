@@ -13,14 +13,27 @@
     <h2>Add Property</h2>
 
     <form asp-action="AddProperty" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="Rent">Rent:</label>
-            <input asp-for="Rent" class="form-control" type="number" step="0.01" required />
-        </div>
 
         <div class="form-group">
             <label for="Location">Location:</label>
             <input asp-for="Location" class="form-control" type="text" required />
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="Rent">Rent:</label>
+                <input asp-for="Rent" class="form-control" type="number" step="0.01" required />
+            </div>
+
+            <div class="form-group">
+                <label for="NumberOfRooms">Rooms:</label>
+                <input asp-for="NumberOfRooms" class="form-control" type="number" required />
+            </div>
+
+            <div class="form-group">
+                <label for="NumberOfBathrooms">Bathrooms:</label>
+                <input asp-for="NumberOfBathrooms" class="form-control" type="number" required />
+            </div>
         </div>
 
         <div class="form-group">
@@ -28,28 +41,16 @@
             <textarea asp-for="Description" class="form-control" required></textarea>
         </div>
 
-        <div class="form-group">
-            <label for="NumberOfRooms">Number of Rooms:</label>
-            <input asp-for="NumberOfRooms" class="form-control" type="number" required />
-        </div>
-
-        <div class="form-group">
-            <label for="NumberOfBathrooms">Number of Bathrooms:</label>
-            <input asp-for="NumberOfBathrooms" class="form-control" type="number" required />
-        </div>
-
-        <!-- Custom Image Upload Section -->
+        <!-- Image Upload Section -->
         <div class="form-group">
             <label>Upload Images:</label>
             <div class="upload-container">
-                <!-- Squircle Button -->
                 <div class="upload-btn" onclick="document.getElementById('imageInput').click();">
                     <span>+</span>
                 </div>
                 <input type="file" id="imageInput" name="Images" accept="image/*" multiple hidden>
             </div>
 
-            <!-- Image Grid Container -->
             <div class="image-container" id="imageContainer"></div>
             <input type="hidden" id="uploadedImages" name="uploadedImages">
         </div>
