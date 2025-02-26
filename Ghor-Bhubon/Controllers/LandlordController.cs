@@ -145,5 +145,82 @@ namespace Ghor_Bhubon.Controllers
             return NotFound();
         }
 
+
+        public IActionResult EditProperty(int id)
+        {
+            var flat = _context.Flats.FirstOrDefault(f => f.FlatID == id);
+
+            if (flat == null)
+            {
+                return NotFound();
+            }
+
+            return View(flat); // Load EditProperty.cshtml with data
+        }
+
+
+        [HttpPost]
+        public IActionResult SaveEditedProperty(Flat flat, List<IFormFile> NewImages, List<string> deleteImages)
+        {
+            var existingFlat = _context.Flats.FirstOrDefault(f => f.FlatID == flat.FlatID);
+
+            if (existingFlat != null)
+            {
+                existingFlat.Location = flat.Location;
+                existingFlat.Rent = flat.Rent;
+                existingFlat.NumberOfRooms = flat.NumberOfRooms;
+                existingFlat.NumberOfBathrooms = flat.NumberOfBathrooms;
+                existingFlat.Description = flat.Description;
+
+                // Process image deletions
+                if (deleteImages != null && deleteImages.Count > 0)
+                {
+                    var imageList = existingFlat.ImagePaths.Split(",").ToList();
+                    foreach (var img in deleteImages)
+                    {
+                        imageList.Remove(img);
+                        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, img.TrimStart('/'));
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+                    }
+                    existingFlat.ImagePaths = string.Join(",", imageList);
+                }
+
+                // Process new images
+                if (NewImages != null && NewImages.Count > 0)
+                {
+                    string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+                    if (!Directory.Exists(uploadFolder))
+                    {
+                        Directory.CreateDirectory(uploadFolder);
+                    }
+
+                    List<string> uploadedPaths = existingFlat.ImagePaths.Split(",").ToList();
+                    foreach (var image in NewImages)
+                    {
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(image.FileName);
+                        string filePath = Path.Combine(uploadFolder, uniqueFileName);
+
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            image.CopyTo(fileStream);
+                        }
+
+                        uploadedPaths.Add("/uploads/" + uniqueFileName);
+                    }
+
+                    existingFlat.ImagePaths = string.Join(",", uploadedPaths);
+                }
+
+                _context.SaveChanges();
+                return RedirectToAction("PropertyDetails", new { id = flat.FlatID }); // Redirect to details page
+            }
+
+            return View(flat);
+        }
+
+
     }
 }
