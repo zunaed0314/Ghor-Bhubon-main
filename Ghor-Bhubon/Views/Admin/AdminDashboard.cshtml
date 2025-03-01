@@ -1,10 +1,17 @@
-﻿@{
+﻿@model Ghor_Bhubon.Models.AdminDashboardViewModel
+
+@{
     ViewData["Title"] = "Admin Dashboard";
 }
 
 <!-- Sidebar -->
 <div id="sidebar" class="sidebar bg-dark position-fixed" style="width: 250px; left: -250px; height: 100%; transition: 0.3s;">
     <ul class="nav flex-column text-white p-3">
+        <li class="nav-item">
+            <a class="nav-link text-white" href="@Url.Action("AdminDashboard", "Admin")">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link text-white" href="@Url.Action("Profile", "Admin")">Profile</a>
         </li>
@@ -83,20 +90,52 @@
         transform: rotate(180deg);
         transition: transform 0.3s ease;
     }
+
+    /* Styling the main content area */
+    .content-area {
+        margin-left: 0;
+        transition: margin-left 0.3s ease;
+    }
+
+        .content-area.sidebar-open {
+            margin-left: 250px; /* Adjust content when sidebar is open */
+        }
+
+    /* Info Cards */
+    .info-card {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        background-color: white;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+    .card-title {
+        font-weight: bold;
+    }
+
+    .card-body {
+        text-align: center;
+    }
 </style>
 
 <!-- JavaScript for Sidebar Toggle and Submenu -->
 <script>
     document.getElementById("toggleSidebar").addEventListener("click", function () {
         var sidebar = document.getElementById("sidebar");
-        var button = document.getElementById("toggleSidebar");
+        var contentArea = document.querySelector(".content-area");
 
         if (sidebar.style.left === "0px") {
             sidebar.style.left = "-250px";  // Close sidebar
-            button.style.left = "20px";     // Move button back
+            contentArea.classList.remove("sidebar-open");
         } else {
             sidebar.style.left = "0px";     // Open sidebar
-            button.style.left = "250px";    // Move button inside
+            contentArea.classList.add("sidebar-open");
         }
     });
 
@@ -127,3 +166,144 @@
 
 <!-- FontAwesome for Icons -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<!-- Main Content Area -->
+<div class="container mt-5 content-area">
+    <h2 class="text-center fw-bold">Admin Dashboard</h2>
+    <hr class="mb-4">
+
+    <div class="row g-4">
+        <!-- Total Users -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Total Users</h5>
+                    <h3 class="text-primary">@Model.TotalUsers</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Landlords -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-user-tie fa-3x text-secondary mb-3"></i>
+                    <h5 class="card-title">Total Landlords</h5>
+                    <h3 class="text-secondary">@Model.TotalLandlords</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Tenants -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-home fa-3x text-dark mb-3"></i>
+                    <h5 class="card-title">Total Tenants</h5>
+                    <h3 class="text-dark">@Model.TotalTenants</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Posts -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-file-alt fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Total Posts</h5>
+                    <h3 class="text-success">@Model.TotalPosts</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Homes Rented -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-building fa-3x text-danger mb-3"></i>
+                    <h5 class="card-title">Total Homes Rented</h5>
+                    <h3 class="text-danger">@Model.TotalHomesRented</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Transactions -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-dollar-sign fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Total Transactions</h5>
+                    <h3 class="text-info">$@Model.TotalTransactions</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Revenue -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-coins fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Total Revenue</h5>
+                    <h3 class="text-warning">$@Model.TotalRevenue</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Users This Month -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">New Users (This Month)</h5>
+                    <h3 class="text-primary">@Model.NewUsersThisMonth</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Posts This Month -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-folder-plus fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">New Posts (This Month)</h5>
+                    <h3 class="text-success">@Model.NewPostsThisMonth</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Houses Rented This Month -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-handshake fa-3x text-danger mb-3"></i>
+                    <h5 class="card-title">Houses Rented (This Month)</h5>
+                    <h3 class="text-danger">@Model.HousesRentedThisMonth</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions This Month -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-money-bill-wave fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Transactions (This Month)</h5>
+                    <h3 class="text-info">$@Model.TransactionsThisMonth</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue This Month -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Revenue (This Month)</h5>
+                    <h3 class="text-warning">$@Model.RevenueThisMonth</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
