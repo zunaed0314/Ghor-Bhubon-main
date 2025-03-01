@@ -41,7 +41,14 @@
             <textarea asp-for="Description" class="form-control" required></textarea>
         </div>
 
-        <!-- Image Upload Section -->
+        
+        <div class="form-group">
+            <label for="PropertyDocument">Upload Property Document (PDF):</label>
+            <input type="file" id="PropertyDocument" name="PropertyDocument" accept="application/pdf" required>
+        </div>
+
+
+        
         <div class="form-group">
             <label>Upload Images:</label>
             <div class="upload-container">

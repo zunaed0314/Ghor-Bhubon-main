@@ -51,6 +51,9 @@ namespace Ghor_Bhubon.Migrations
                     b.Property<int>("NumberOfRooms")
                         .HasColumnType("int");
 
+                    b.Property<string>("PdfPath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Rent")
                         .HasColumnType("decimal(18,2)");
 
@@ -60,6 +63,61 @@ namespace Ghor_Bhubon.Migrations
                     b.HasKey("FlatID");
 
                     b.ToTable("Flats");
+                });
+
+            modelBuilder.Entity("Ghor_Bhubon.Models.PropertyPending", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Availability")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePaths")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumberOfBathrooms")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfRooms")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PdfFilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Rent")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("PropertyPending");
                 });
 
             modelBuilder.Entity("Ghor_Bhubon.Models.User", b =>

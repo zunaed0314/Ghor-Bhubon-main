@@ -40,7 +40,7 @@ namespace Ghor_Bhubon.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProperty(Flat flat, string uploadedImages)
+        public IActionResult AddProperty(Flat flat, string uploadedImages, IFormFile PropertyDocument)
         {
             if (ModelState.IsValid)
             {
@@ -48,13 +48,52 @@ namespace Ghor_Bhubon.Controllers
 
                 if (userId.HasValue)
                 {
-                    flat.UserID = userId.Value;
+                    // Retrieve User details from database
+                    var user = _context.Users.FirstOrDefault(u => u.UserID == userId.Value);
+                    if (user == null)
+                    {
+                        ModelState.AddModelError("", "User not found.");
+                        return View(flat);
+                    }
 
-                    // Store multiple file paths (sent from JavaScript via hidden input)
-                    flat.ImagePaths = uploadedImages;
-                    Console.WriteLine("Stored Image Paths: " + flat.ImagePaths); // Debugging
+                    // Handle PDF upload
+                    string pdfFilePath = null;
+                    if (PropertyDocument != null && PropertyDocument.Length > 0)
+                    {
+                        string pdfFolder = Path.Combine(_webHostEnvironment.WebRootPath, "property_docs");
+                        if (!Directory.Exists(pdfFolder))
+                        {
+                            Directory.CreateDirectory(pdfFolder);
+                        }
 
-                    _context.Flats.Add(flat);
+                        string uniquePdfName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(PropertyDocument.FileName);
+                        string pdfPath = Path.Combine(pdfFolder, uniquePdfName);
+
+                        using (var stream = new FileStream(pdfPath, FileMode.Create))
+                        {
+                            PropertyDocument.CopyTo(stream);
+                        }
+
+                        pdfFilePath = "/property_docs/" + uniquePdfName;
+                    }
+
+                    // Save to PropertyPending table
+                    var propertyPending = new PropertyPending
+                    {
+                        UserID = userId.Value,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email, // Store email
+                        Rent = flat.Rent,
+                        Location = flat.Location,
+                        Description = flat.Description,
+                        NumberOfRooms = flat.NumberOfRooms,
+                        NumberOfBathrooms = flat.NumberOfBathrooms,
+                        ImagePaths = uploadedImages,
+                        PdfFilePath = pdfFilePath
+                    };
+
+                    _context.PropertyPending.Add(propertyPending);
                     _context.SaveChanges();
 
                     return RedirectToAction("Dashboard");
@@ -65,6 +104,8 @@ namespace Ghor_Bhubon.Controllers
 
             return View(flat);
         }
+
+
 
         [HttpPost]
         public IActionResult AddSingleImage(IFormFile Image)

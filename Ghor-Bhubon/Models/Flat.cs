@@ -36,5 +36,7 @@ namespace Ghor_Bhubon.Models
         {
             get => string.IsNullOrEmpty(ImagePaths) ? new List<string>() : ImagePaths.Split(',').ToList();
         }
+
+        public string? PdfPath { get; set; }
     }
 }

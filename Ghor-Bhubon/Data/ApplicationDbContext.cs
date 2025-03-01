@@ -12,6 +12,7 @@ namespace Ghor_Bhubon.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Flat> Flats { get; set; }
+        public DbSet<PropertyPending> PropertyPending { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

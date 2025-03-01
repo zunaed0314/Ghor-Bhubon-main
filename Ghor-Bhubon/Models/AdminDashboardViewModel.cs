@@ -14,5 +14,8 @@
         public int HousesRentedThisMonth { get; set; }
         public decimal TransactionsThisMonth { get; set; }
         public decimal RevenueThisMonth { get; set; }
+
+        public int TotalPending { get; set; }
+        
     }
 }

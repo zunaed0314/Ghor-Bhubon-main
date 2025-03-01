@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Ghor_Bhubon.Models.PropertyPending>
+
+<div class="container">
+    <h2>Pending Properties</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>UserID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+                <th></th>
+
+                <th></th>
+
+                <th></th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var property in Model)
+            {
+                <tr>
+                    <td>@property.UserID</td>
+                    <td>@property.FirstName @property.LastName</td>
+                    <td>@property.Email</td>
+                    
+                        
+                    <td> <a href="@Url.Action("Approve", "Admin", new { id = property.ID })" class="btn btn-success">Approve</a></td>
+
+                    <td>  <a href="@Url.Action("Decline", "Admin", new { id = property.ID })" class="btn btn-danger">Decline</a></td>
+
+                        
+                        @if (!string.IsNullOrEmpty(property.PdfFilePath))
+                        {
+                        <td><a href="@Url.Content(property.PdfFilePath)" target="_blank" class="btn btn-primary">View PDF</a></td>
+                        }
+                    <td> <a href="@Url.Action("PropertyDetailsPending", "Admin", new { id = property.ID })" class="btn btn-primary">View More Details</a></td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
