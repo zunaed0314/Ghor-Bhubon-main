@@ -2,27 +2,185 @@
 @{
     ViewData["Title"] = "View Tenants";
 }
-<h3>View Tenants</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>phone</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.FirstName</td>
-                <td>@item.LastName</td>
-                <td>@item.Email</td>
-                <td>@item.Phone</td>
-                <td><a asp-action="Delete" asp-route-id="@item.UserID">Delete</a></td>
-            </tr>
-        }
-    </tbody>
 
-</table>
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar bg-dark position-fixed" style="width: 250px; left: -250px; height: 100%; transition: 0.3s;">
+    <ul class="nav flex-column text-white p-3">
+        <li class="nav-item">
+            <a class="nav-link text-white" href="@Url.Action("AdminDashboard", "Admin")">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="@Url.Action("Profile", "Admin")">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="@Url.Action("PendingPosts", "Admin")">Pending Posts</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="@Url.Action("Expenses", "Admin")">Expenses</a>
+        </li>
+        <!-- Manage Users with Dropdown -->
+        <li class="nav-item">
+            <a class="nav-link text-white d-flex justify-content-between align-items-center" href="#" id="manageUsersToggle">
+                Manage Users <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="nav flex-column text-white pl-3" id="manageUsersSubmenu" style="display: none;">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="@Url.Action("ViewLandlords", "Admin")">View Landlords</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="@Url.Action("ViewTenants", "Admin")">View Tenants</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div id="toggleSidebar" class="d-flex flex-column justify-content-center align-items-center" style="width: 40px; height: 60px; position: fixed; top: 5px; left: 20px; cursor: pointer; transition: 0.3s;">
+    <div style="width: 30px; height: 3px; background-color: black; margin: 2px 0;"></div>
+    <div style="width: 30px; height: 3px; background-color: black; margin: 2px 0;"></div>
+    <div style="width: 30px; height: 3px; background-color: black; margin: 2px 0;"></div>
+</div>
+
+<div id="contentWrapper" style="margin-left: 0; transition: margin-left 0.3s ease;">
+    <h3 class="mt-4 text-primary">Tenants</h3>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered text-center shadow-lg mt-3">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="align-middle">
+                        <td>@item.FirstName</td>
+                        <td>@item.LastName</td>
+                        <td>@item.Email</td>
+                        <td>@item.Phone</td>
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@item.UserID" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                            <a asp-action="" asp-route-id="@item.UserID" class="btn btn-primary btn-sm">
+                                <i class="fas fa-trash-alt"></i> View Profile
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    #sidebar .nav-link {
+        transition: background-color 0.3s, color 0.3s, transform 0.3s, text-shadow 0.3s;
+    }
+
+        #sidebar .nav-link:hover {
+            background-color: #495057;
+            color: #fff;
+            transform: translateX(5px) translateY(-5px);
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4), -2px -2px 5px rgba(0, 0, 0, 0.4);
+        }
+
+        #sidebar .nav-link.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    #toggleSidebar div {
+        transition: background-color 0.3s;
+    }
+
+        #toggleSidebar div:hover {
+            background-color: #555;
+        }
+
+    #manageUsersSubmenu {
+        background: #343a40;
+        border-left: 3px solid #007bff;
+    }
+
+        #manageUsersSubmenu .nav-link {
+            padding-left: 20px;
+        }
+
+    .rotate {
+        transform: rotate(180deg);
+        transition: transform 0.3s ease;
+    }
+
+    .table {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    thead {
+        font-size: 18px;
+    }
+
+    tbody tr:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.02);
+        transition: 0.3s ease-in-out;
+    }
+
+    .btn-danger {
+        transition: 0.3s;
+    }
+
+        .btn-danger:hover {
+            background-color: #dc3545;
+            box-shadow: 0px 5px 10px rgba(220, 53, 69, 0.4);
+        }
+</style>
+
+<script>
+    document.getElementById("toggleSidebar").addEventListener("click", function () {
+        var sidebar = document.getElementById("sidebar");
+        var button = document.getElementById("toggleSidebar");
+        var content = document.getElementById("contentWrapper");
+
+        if (sidebar.style.left === "0px") {
+            sidebar.style.left = "-250px";
+            button.style.left = "20px";
+            content.style.marginLeft = "0";
+        } else {
+            sidebar.style.left = "0px";
+            button.style.left = "250px";
+            content.style.marginLeft = "250px";
+        }
+    });
+
+    document.getElementById("manageUsersToggle").addEventListener("click", function (event) {
+        event.preventDefault();
+        var submenu = document.getElementById("manageUsersSubmenu");
+        var icon = this.querySelector("i");
+
+        if (submenu.style.display === "none") {
+            submenu.style.display = "block";
+            icon.classList.add("rotate");
+        } else {
+            submenu.style.display = "none";
+            icon.classList.remove("rotate");
+        }
+    });
+
+    const navLinks = document.querySelectorAll("#sidebar .nav-link");
+    navLinks.forEach(link => {
+        link.addEventListener("click", function () {
+            navLinks.forEach(l => l.classList.remove("active"));
+            link.classList.add("active");
+        });
+    });
+</script>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>

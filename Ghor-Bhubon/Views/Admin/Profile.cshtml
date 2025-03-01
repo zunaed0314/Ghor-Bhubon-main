@@ -1,8 +1,134 @@
 ﻿@{
-    ViewData["Title"] = "Expenses";
+    ViewData["Title"] = "Profile";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Profile</h1>
-
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar bg-dark position-fixed" style="width: 250px; left: -250px; height: 100%; transition: 0.3s;">
+    <ul class="nav flex-column text-white p-3">
+        <li class="nav-item">
+            <a class="nav-link text-white" href="@Url.Action("AdminDashboard", "Admin")">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="@Url.Action("Profile", "Admin")">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="@Url.Action("PendingPosts", "Admin")">Pending Posts</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="@Url.Action("Expenses", "Admin")">Expenses</a>
+        </li>
+        <!-- Manage Users with Dropdown -->
+        <li class="nav-item">
+            <a class="nav-link text-white d-flex justify-content-between align-items-center" href="#" id="manageUsersToggle">
+                Manage Users <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="nav flex-column text-white pl-3" id="manageUsersSubmenu" style="display: none;">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="@Url.Action("ViewLandlords", "Admin")">View Landlords</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="@Url.Action("ViewTenants", "Admin")">View Tenants</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
 </div>
+
+<!-- Hamburger Button (Three Stacked Lines) -->
+<div id="toggleSidebar" class="d-flex flex-column justify-content-center align-items-center" style="width: 40px; height: 60px; position: fixed; top: 5px; left: 20px; cursor: pointer; transition: 0.3s;">
+    <div style="width: 30px; height: 3px; background-color: black; margin: 2px 0;"></div>
+    <div style="width: 30px; height: 3px; background-color: black; margin: 2px 0;"></div>
+    <div style="width: 30px; height: 3px; background-color: black; margin: 2px 0;"></div>
+</div>
+
+<!-- Style for Hover and Click Effects -->
+<style>
+    /* Sidebar hover effects */
+    #sidebar .nav-link {
+        transition: background-color 0.3s, color 0.3s, transform 0.3s, text-shadow 0.3s;
+    }
+
+        /* 3D text effect on hover */
+        #sidebar .nav-link:hover {
+            background-color: #495057;
+            color: #fff;
+            transform: translateX(5px) translateY(-5px);
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4), -2px -2px 5px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Active link effect */
+        #sidebar .nav-link.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    /* Hover effect on hamburger button */
+    #toggleSidebar div {
+        transition: background-color 0.3s;
+    }
+
+        #toggleSidebar div:hover {
+            background-color: #555;
+        }
+
+    /* Submenu styling */
+    #manageUsersSubmenu {
+        background: #343a40;
+        border-left: 3px solid #007bff;
+    }
+
+        #manageUsersSubmenu .nav-link {
+            padding-left: 20px;
+        }
+
+    /* Rotate arrow when submenu opens */
+    .rotate {
+        transform: rotate(180deg);
+        transition: transform 0.3s ease;
+    }
+</style>
+
+<!-- JavaScript for Sidebar Toggle and Submenu -->
+<script>
+    document.getElementById("toggleSidebar").addEventListener("click", function () {
+        var sidebar = document.getElementById("sidebar");
+        var button = document.getElementById("toggleSidebar");
+
+        if (sidebar.style.left === "0px") {
+            sidebar.style.left = "-250px";  // Close sidebar
+            button.style.left = "20px";     // Move button back
+        } else {
+            sidebar.style.left = "0px";     // Open sidebar
+            button.style.left = "250px";    // Move button inside
+        }
+    });
+
+    // Toggle Manage Users Submenu
+    document.getElementById("manageUsersToggle").addEventListener("click", function (event) {
+        event.preventDefault();  // Prevent default anchor behavior
+        var submenu = document.getElementById("manageUsersSubmenu");
+        var icon = this.querySelector("i");
+
+        if (submenu.style.display === "none") {
+            submenu.style.display = "block";
+            icon.classList.add("rotate");
+        } else {
+            submenu.style.display = "none";
+            icon.classList.remove("rotate");
+        }
+    });
+
+    // Add click effect to each link
+    const navLinks = document.querySelectorAll("#sidebar .nav-link");
+    navLinks.forEach(link => {
+        link.addEventListener("click", function () {
+            navLinks.forEach(l => l.classList.remove("active"));
+            link.classList.add("active");
+        });
+    });
+</script>
+
+<!-- FontAwesome for Icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
