@@ -4,9 +4,6 @@
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 h2 {
@@ -63,17 +60,14 @@ textarea {
 }
 
 button {
-    background-color: #007bff;
+    background-color: #4CAF50;
     color: white;
     border: none;
-    padding: 1.5vh;
-    font-size: 1.6vw;
-    border-radius: 0.5vw;
-    cursor: pointer;
+    border-radius: 1vw; /* Border radius in vw */
+    font-size: 2vw; /* Font size in vw */
     width: 100%;
-    display: block;
-    text-align: center;
-    transition: background-color 0.3s;
+    cursor: pointer;
+    margin-top: 3vh; /* Margin top in vh */
 }
 
     button:hover {

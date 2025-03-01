@@ -1,0 +1,28 @@
+﻿@model List<Ghor_Bhubon.Models.User>
+@{
+    ViewData["Title"] = "View Land-Lords";
+}
+<h3>View Land-Lords</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>phone</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.Email</td>
+                <td>@item.Phone</td>
+                <td><a asp-action="Delete" asp-route-id="@item.UserID">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+
+</table>

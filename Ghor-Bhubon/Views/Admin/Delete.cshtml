@@ -1,0 +1,22 @@
+﻿@model Ghor_Bhubon.Models.User
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+@if (Model == null)
+{
+    <h3 class="text-danger">Error: The user you are trying to delete does not exist.</h3>
+    <a class="btn btn-primary" href="@Url.Action("AdminDashBoard", "Admin")">Go Back</a>
+}
+else
+{
+    <h3>Are you sure you want to remove the following user?</h3>
+    <p>@Model.FirstName</p>
+    <p>@Model.LastName</p>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="UserID" />
+        <input type="submit" class="btn btn-danger" value="Delete it!" />
+    </form>
+}
