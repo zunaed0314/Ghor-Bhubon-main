@@ -68,8 +68,8 @@
                             <a asp-action="Delete" asp-route-id="@item.UserID" class="btn btn-danger btn-sm">
                                 <i class="fas fa-trash-alt"></i> Delete
                             </a>
-                            <a asp-action="" asp-route-id="@item.UserID" class="btn btn-primary btn-sm">
-                                <i class="fas fa-trash-alt"></i> View Profile
+                            <a asp-action="LandlordDashboard" asp-controller="Admin" asp-route-id="@item.UserID" class="btn btn-primary btn-sm">
+                                <i class="fas fa-user"></i> View Profile
                             </a>
                         </td>
                     </tr>
