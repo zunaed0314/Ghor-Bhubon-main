@@ -196,5 +196,32 @@ namespace Ghor_Bhubon.Controllers
             TempData["ErrorMessage"] = "User not found or has already been deleted.";
             return RedirectToAction("AdminDashBoard");
         }
+
+
+        public IActionResult LandlordDashboard(int id)
+        {
+            var landlord = _context.Users.FirstOrDefault(u => u.UserID == id);
+            if (landlord == null)
+            {
+                return NotFound();
+            }
+
+            // Fetch flats where UserID (landlord ID) matches the given id
+            var flats = _context.Flats.Where(f => f.UserID == id).ToList();
+            return View("LandlordProperties", flats);
+        }
+
+        public IActionResult PropertyDetails(int id)
+        {
+            var flat = _context.Flats.FirstOrDefault(f => f.FlatID == id);
+            if (flat == null)
+            {
+                return NotFound();
+            }
+
+            Console.WriteLine("Property Image Paths: " + flat.ImagePaths); // Debugging
+
+            return View(flat);
+        }
     }
 }

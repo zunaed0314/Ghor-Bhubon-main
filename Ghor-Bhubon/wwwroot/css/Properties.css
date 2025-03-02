@@ -30,13 +30,14 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
+    object-fit:contain;
 }
 
 .property-image {
     width: 20vw; /* Adjusted for better visibility */
     height: 40vh;
     border-radius: 5px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 
