@@ -101,7 +101,7 @@ namespace Ghor_Bhubon.Controllers
             await _context.SaveChangesAsync();
 
             // Redirect to the PropertyPending list page or other page after success
-            return RedirectToAction(nameof(PropertyPendingList)); // Replace with the actual action to show the list
+            return RedirectToAction(nameof(PendingPosts));  // Replace with the appropriate action
         }
 
 
@@ -122,7 +122,7 @@ namespace Ghor_Bhubon.Controllers
             await _context.SaveChangesAsync();
 
             // Redirect to the list of pending properties or other page after success
-            return RedirectToAction(nameof(PropertyPendingList));  // Replace with the appropriate action
+            return RedirectToAction(nameof(PendingPosts));  // Replace with the appropriate action
         }
 
         public async Task<IActionResult> PropertyDetailsPending(int id)
