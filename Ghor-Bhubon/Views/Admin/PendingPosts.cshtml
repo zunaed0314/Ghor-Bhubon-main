@@ -45,12 +45,10 @@
 
 <!-- Style for Hover and Click Effects -->
 <style>
-    /* Sidebar hover effects */
     #sidebar .nav-link {
         transition: background-color 0.3s, color 0.3s, transform 0.3s, text-shadow 0.3s;
     }
 
-        /* 3D text effect on hover */
         #sidebar .nav-link:hover {
             background-color: #495057;
             color: #fff;
@@ -58,13 +56,11 @@
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4), -2px -2px 5px rgba(0, 0, 0, 0.4);
         }
 
-        /* Active link effect */
         #sidebar .nav-link.active {
             background-color: #007bff;
             color: #fff;
         }
 
-    /* Hover effect on hamburger button */
     #toggleSidebar div {
         transition: background-color 0.3s;
     }
@@ -73,7 +69,6 @@
             background-color: #555;
         }
 
-    /* Submenu styling */
     #manageUsersSubmenu {
         background: #343a40;
         border-left: 3px solid #007bff;
@@ -83,31 +78,55 @@
             padding-left: 20px;
         }
 
-    /* Rotate arrow when submenu opens */
     .rotate {
         transform: rotate(180deg);
         transition: transform 0.3s ease;
     }
+
+    .table {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    thead {
+        font-size: 18px;
+    }
+
+    tbody tr:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.02);
+        transition: 0.3s ease-in-out;
+    }
+
+    .btn-danger {
+        transition: 0.3s;
+    }
+
+        .btn-danger:hover {
+            background-color: #dc3545;
+            box-shadow: 0px 5px 10px rgba(220, 53, 69, 0.4);
+        }
 </style>
 
-<!-- JavaScript for Sidebar Toggle and Submenu -->
 <script>
     document.getElementById("toggleSidebar").addEventListener("click", function () {
         var sidebar = document.getElementById("sidebar");
         var button = document.getElementById("toggleSidebar");
+        var content = document.getElementById("contentWrapper");
 
         if (sidebar.style.left === "0px") {
-            sidebar.style.left = "-250px";  // Close sidebar
-            button.style.left = "20px";     // Move button back
+            sidebar.style.left = "-250px";
+            button.style.left = "20px";
+            content.style.marginLeft = "0";
         } else {
-            sidebar.style.left = "0px";     // Open sidebar
-            button.style.left = "250px";    // Move button inside
+            sidebar.style.left = "0px";
+            button.style.left = "250px";
+            content.style.marginLeft = "250px";
         }
     });
 
-    // Toggle Manage Users Submenu
     document.getElementById("manageUsersToggle").addEventListener("click", function (event) {
-        event.preventDefault();  // Prevent default anchor behavior
+        event.preventDefault();
         var submenu = document.getElementById("manageUsersSubmenu");
         var icon = this.querySelector("i");
 
@@ -120,7 +139,6 @@
         }
     });
 
-    // Add click effect to each link
     const navLinks = document.querySelectorAll("#sidebar .nav-link");
     navLinks.forEach(link => {
         link.addEventListener("click", function () {
@@ -130,5 +148,47 @@
     });
 </script>
 
-<!-- FontAwesome for Icons -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+@model IEnumerable<Ghor_Bhubon.Models.PropertyPending>
+
+
+
+<div id="contentWrapper" style="margin-left: 0; transition: margin-left 0.3s ease;">
+    <h3 class="mt-4 text-primary">Pending Properties</h3>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>UserID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var property in Model)
+                {
+                    <tr>
+                        <td>@property.UserID</td>
+                        <td>@property.FirstName @property.LastName</td>
+                        <td>@property.Email</td>
+
+
+                        <td> <a href="@Url.Action("Approve", "Admin", new { id = property.ID })" class="btn btn-success">Approve</a></td>
+
+                        <td>  <a href="@Url.Action("Decline", "Admin", new { id = property.ID })" class="btn btn-danger">Decline</a></td>
+
+
+                        @if (!string.IsNullOrEmpty(property.PdfFilePath))
+                        {
+                            <td><a href="@Url.Content(property.PdfFilePath)" target="_blank" class="btn btn-primary">View PDF</a></td>
+                        }
+                        <td> <a href="@Url.Action("PendingPosts", "Admin", new { id = property.ID })" class="btn btn-primary">View More Details</a></td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
