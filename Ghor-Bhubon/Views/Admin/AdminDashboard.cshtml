@@ -4,7 +4,6 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<!-- Sidebar -->
 <div id="sidebar" class="sidebar bg-dark position-fixed" style="width: 250px; left: -250px; height: 100%; transition: 0.3s;">
     <ul class="nav flex-column text-white p-3">
         <li class="nav-item">
@@ -38,7 +37,6 @@
     </ul>
 </div>
 
-<!-- Hamburger Button (Three Stacked Lines) -->
 <div id="toggleSidebar" class="d-flex flex-column justify-content-center align-items-center" style="width: 40px; height: 60px; position: fixed; top: 5px; left: 20px; cursor: pointer; transition: 0.3s;">
     <div style="width: 30px; height: 3px; background-color: black; margin: 2px 0;"></div>
     <div style="width: 30px; height: 3px; background-color: black; margin: 2px 0;"></div>
@@ -122,26 +120,50 @@
     .card-body {
         text-align: center;
     }
+
+    tbody tr:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.02);
+        transition: 0.3s ease-in-out;
+    }
+
+    .btn-danger {
+        transition: 0.3s;
+    }
+
+        .btn-danger:hover {
+            background-color: #dc3545;
+            box-shadow: 0px 5px 10px rgba(220, 53, 69, 0.4);
+        }
+
+
 </style>
 
-<!-- JavaScript for Sidebar Toggle and Submenu -->
+
+
+
+
+
+
 <script>
     document.getElementById("toggleSidebar").addEventListener("click", function () {
         var sidebar = document.getElementById("sidebar");
-        var contentArea = document.querySelector(".content-area");
+        var button = document.getElementById("toggleSidebar");
+        var content = document.getElementById("contentWrapper");
 
         if (sidebar.style.left === "0px") {
-            sidebar.style.left = "-250px";  // Close sidebar
-            contentArea.classList.remove("sidebar-open");
+            sidebar.style.left = "-250px";
+            button.style.left = "20px";
+            content.style.marginLeft = "0";
         } else {
-            sidebar.style.left = "0px";     // Open sidebar
-            contentArea.classList.add("sidebar-open");
+            sidebar.style.left = "0px";
+            button.style.left = "250px";
+            content.style.marginLeft = "250px";
         }
     });
 
-    // Toggle Manage Users Submenu
     document.getElementById("manageUsersToggle").addEventListener("click", function (event) {
-        event.preventDefault();  // Prevent default anchor behavior
+        event.preventDefault();
         var submenu = document.getElementById("manageUsersSubmenu");
         var icon = this.querySelector("i");
 
@@ -154,7 +176,6 @@
         }
     });
 
-    // Add click effect to each link
     const navLinks = document.querySelectorAll("#sidebar .nav-link");
     navLinks.forEach(link => {
         link.addEventListener("click", function () {
@@ -164,159 +185,160 @@
     });
 </script>
 
-<!-- FontAwesome for Icons -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-<!-- Main Content Area -->
-<div class="container mt-5 content-area">
-    <h2 class="text-center fw-bold">Admin Dashboard</h2>
-    <hr class="mb-4">
 
-    <div class="row g-4">
-        <!-- Total Users -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card info-card">
-                <div class="card-body">
-                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
-                    <h5 class="card-title">Total Users</h5>
-                    <h3 class="text-primary">@Model.TotalUsers</h3>
-                </div>
-            </div>
-        </div>
+<div id="contentWrapper" style="margin-left: 0; transition: margin-left 0.3s ease;">
+    <div class="table-responsive">
+        <div class="container mt-5 content-area">
+            <h2 class="text-center fw-bold">Admin Dashboard</h2>
+            <hr class="mb-4">
 
-        <!-- Total Landlords -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card info-card">
-                <div class="card-body">
-                    <i class="fas fa-user-tie fa-3x text-secondary mb-3"></i>
-                    <h5 class="card-title">Total Landlords</h5>
-                    <h3 class="text-secondary">@Model.TotalLandlords</h3>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Tenants -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card info-card">
-                <div class="card-body">
-                    <i class="fas fa-home fa-3x text-dark mb-3"></i>
-                    <h5 class="card-title">Total Tenants</h5>
-                    <h3 class="text-dark">@Model.TotalTenants</h3>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Posts -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card info-card">
-                <div class="card-body">
-                    <i class="fas fa-file-alt fa-3x text-success mb-3"></i>
-                    <h5 class="card-title">Total Posts</h5>
-                    <h3 class="text-success">@Model.TotalPosts</h3>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Homes Rented -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card info-card">
-                <div class="card-body">
-                    <i class="fas fa-building fa-3x text-danger mb-3"></i>
-                    <h5 class="card-title">Total Homes Rented</h5>
-                    <h3 class="text-danger">@Model.TotalHomesRented</h3>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Transactions -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card info-card">
-                <div class="card-body">
-                    <i class="fas fa-dollar-sign fa-3x text-info mb-3"></i>
-                    <h5 class="card-title">Total Transactions</h5>
-                    <h3 class="text-info">$@Model.TotalTransactions</h3>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Revenue -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card info-card">
-                <div class="card-body">
-                    <i class="fas fa-coins fa-3x text-warning mb-3"></i>
-                    <h5 class="card-title">Total Revenue</h5>
-                    <h3 class="text-warning">$@Model.TotalRevenue</h3>
-                </div>
-            </div>
-        </div>
-
-        <!-- New Users This Month -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card info-card">
-                <div class="card-body">
-                    <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
-                    <h5 class="card-title">New Users (This Month)</h5>
-                    <h3 class="text-primary">@Model.NewUsersThisMonth</h3>
-                </div>
-            </div>
-        </div>
-
-        <!-- New Posts This Month -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card info-card">
-                <div class="card-body">
-                    <i class="fas fa-folder-plus fa-3x text-success mb-3"></i>
-                    <h5 class="card-title">New Posts (This Month)</h5>
-                    <h3 class="text-success">@Model.NewPostsThisMonth</h3>
-                </div>
-            </div>
-        </div>
-
-        <!-- Houses Rented This Month -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card info-card">
-                <div class="card-body">
-                    <i class="fas fa-handshake fa-3x text-danger mb-3"></i>
-                    <h5 class="card-title">Houses Rented (This Month)</h5>
-                    <h3 class="text-danger">@Model.HousesRentedThisMonth</h3>
-                </div>
-            </div>
-        </div>
-
-        <!-- Transactions This Month -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card info-card">
-                <div class="card-body">
-                    <i class="fas fa-money-bill-wave fa-3x text-info mb-3"></i>
-                    <h5 class="card-title">Transactions (This Month)</h5>
-                    <h3 class="text-info">$@Model.TransactionsThisMonth</h3>
-                </div>  
-            </div>
-        </div>
-
-        <!-- Revenue This Month -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card info-card">
-                <div class="card-body">
-                    <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
-                    <h5 class="card-title">Revenue (This Month)</h5>
-                    <h3 class="text-warning">$@Model.RevenueThisMonth</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6">
-            <a href="@Url.Action("PropertyPendingList", "Admin")" class="card-link">
-                <div class="card info-card">
-                    <div class="card-body">
-                        <i class="fas fa-money-bill-wave fa-3x text-info mb-3"></i>
-                        <h5 class="card-title">Pending Posts</h5>
-                        <h3 class="text-info">@Model.TotalPending</h3>
+            <div class="row g-4">
+                <!-- Total Users -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <i class="fas fa-home fa-3x text-dark mb-3"></i>
+                            <h5 class="card-title">Total Users</h5>
+                            <h3 class="text-dark">@Model.TotalUsers</h3>
+                        </div>
                     </div>
                 </div>
-            </a>
-        </div>
 
+                <!-- Total Landlords -->
+                <div class="col-lg-4 col-md-6">
+                    <a href="@Url.Action("ViewLandlords", "Admin")" class="card-link">
+                        <div class="card info-card">
+                            <div class="card-body">
+                                <i class="fas fa-user-tie fa-3x text-secondary mb-3"></i>
+                                <h5 class="card-title">Total Landlords</h5>
+                                <h3 class="text-secondary">@Model.TotalLandlords</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Total Tenants -->
+                <div class="col-lg-4 col-md-6">
+                    <a href="@Url.Action("ViewTenants", "Admin")" class="card-link">
+                        <div class="card info-card">
+                            <div class="card-body">
+                                <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Total Tenants</h5>
+                                <h3 class="text-primary">@Model.TotalTenants</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Total Posts -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <i class="fas fa-file-alt fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">Total Posts</h5>
+                            <h3 class="text-success">@Model.TotalPosts</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Homes Rented -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <i class="fas fa-building fa-3x text-danger mb-3"></i>
+                            <h5 class="card-title">Total Homes Rented</h5>
+                            <h3 class="text-danger">@Model.TotalHomesRented</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Transactions -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <i class="fas fa-dollar-sign fa-3x text-info mb-3"></i>
+                            <h5 class="card-title">Total Transactions</h5>
+                            <h3 class="text-info">$@Model.TotalTransactions</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Revenue -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <i class="fas fa-coins fa-3x text-warning mb-3"></i>
+                            <h5 class="card-title">Total Revenue</h5>
+                            <h3 class="text-warning">$@Model.TotalRevenue</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <a href="@Url.Action("PendingPosts", "Admin")" class="card-link">
+                        <div class="card info-card">
+                            <div class="card-body">
+                                <i class="fas fa-money-bill-wave fa-3x text-info mb-3"></i>
+                                <h5 class="card-title">Pending Posts</h5>
+                                <h3 class="text-info">@Model.TotalPending</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- New Posts This Month -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <i class="fas fa-folder-plus fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">New Posts (This Month)</h5>
+                            <h3 class="text-success">@Model.NewPostsThisMonth</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Houses Rented This Month -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <i class="fas fa-handshake fa-3x text-danger mb-3"></i>
+                            <h5 class="card-title">Houses Rented (This Month)</h5>
+                            <h3 class="text-danger">@Model.HousesRentedThisMonth</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions This Month -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <i class="fas fa-money-bill-wave fa-3x text-info mb-3"></i>
+                            <h5 class="card-title">Transactions (This Month)</h5>
+                            <h3 class="text-info">$@Model.TransactionsThisMonth</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Revenue This Month -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
+                            <h5 class="card-title">Revenue (This Month)</h5>
+                            <h3 class="text-warning">$@Model.RevenueThisMonth</h3>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- Main Content Area -->
+
 
