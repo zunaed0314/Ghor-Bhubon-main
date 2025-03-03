@@ -20,7 +20,7 @@
         <li class="nav-item">
             <a class="nav-link text-white" href="@Url.Action("Expenses", "Admin")">Expenses</a>
         </li>
-        
+        <!-- Manage Users with Dropdown -->
         <li class="nav-item">
             <a class="nav-link text-white d-flex justify-content-between align-items-center" href="#" id="manageUsersToggle">
                 Manage Users <i class="fas fa-chevron-down"></i>
@@ -35,6 +35,11 @@
             </ul>
         </li>
     </ul>
+    <form asp-action="Logout" asp-controller="User" method="post">
+        <button type="submit" class="btn btn-danger w-100 text-left">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </form>
 </div>
 
 <div id="toggleSidebar" class="d-flex flex-column justify-content-center align-items-center" style="width: 40px; height: 60px; position: fixed; top: 5px; left: 20px; cursor: pointer; transition: 0.3s;">

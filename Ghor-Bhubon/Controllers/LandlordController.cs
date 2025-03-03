@@ -262,7 +262,15 @@ namespace Ghor_Bhubon.Controllers
             return View(flat);
         }
 
-        
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear(); 
+            return RedirectToAction("Login", "User");
+        }
+
+
+
 
 
 
