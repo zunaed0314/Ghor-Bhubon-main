@@ -15,6 +15,9 @@ namespace Ghor_Bhubon.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
+        public double Longitude { get; private set; }
+        public double Latitude { get; private set; }
+
         public LandlordController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
@@ -83,9 +86,11 @@ namespace Ghor_Bhubon.Controllers
                         UserID = userId.Value,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
-                        Email = user.Email, // Store email
+                        Email = user.Email,
                         Rent = flat.Rent,
                         Location = flat.Location,
+                        Latitude = Latitude,  // Store Latitude
+                        Longitude = Longitude, // Store Longitude
                         Description = flat.Description,
                         NumberOfRooms = flat.NumberOfRooms,
                         NumberOfBathrooms = flat.NumberOfBathrooms,
@@ -262,7 +267,8 @@ namespace Ghor_Bhubon.Controllers
             return View(flat);
         }
 
-        
+       
+
 
 
 

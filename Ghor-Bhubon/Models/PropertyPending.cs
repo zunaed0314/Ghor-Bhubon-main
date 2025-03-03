@@ -26,6 +26,10 @@ namespace Ghor_Bhubon.Models
         public string Location { get; set; }
 
         [Required]
+        public double Latitude { get; set; } // New Field
+        [Required]
+        public double Longitude { get; set; } // New Field
+        [Required]
         public string Description { get; set; }
 
         [Required]
@@ -39,6 +43,7 @@ namespace Ghor_Bhubon.Models
         public string? ImagePaths { get; set; } // Store multiple image paths as a comma-separated string
 
         public string? PdfFilePath { get; set; } // Store the uploaded PDF file path
+
     }
 
 }
