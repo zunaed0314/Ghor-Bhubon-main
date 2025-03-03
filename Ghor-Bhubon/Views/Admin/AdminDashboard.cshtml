@@ -38,6 +38,11 @@
             </ul>
         </li>
     </ul>
+    <form asp-action="Logout" asp-controller="User" method="post">
+        <button type="submit" class="btn btn-danger w-100 text-left">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </form>
 </div>
 
 <div id="toggleSidebar" class="d-flex flex-column justify-content-center align-items-center" style="width: 40px; height: 60px; position: fixed; top: 5px; left: 20px; cursor: pointer; transition: 0.3s;">

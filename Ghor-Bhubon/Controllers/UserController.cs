@@ -122,9 +122,27 @@ namespace Ghor_Bhubon.Controllers
                     CreatedAt = DateTime.Now
                 };
 
+
                 _context.Users.Add(adminUser);
                 _context.SaveChanges();
             }
+        }
+
+        public IActionResult AdminDashboard()
+        {
+            if (HttpContext.Session.GetInt32("UserID") == null)
+            {
+                return RedirectToAction("Login", "User"); 
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "User");
         }
     }
 }
