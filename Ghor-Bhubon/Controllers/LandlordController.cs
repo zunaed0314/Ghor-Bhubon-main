@@ -89,8 +89,8 @@ namespace Ghor_Bhubon.Controllers
                         Email = user.Email, // Store email
                         Rent = flat.Rent,
                         Location = flat.Location,
-                        Latitude = Latitude,  // Store Latitude
-                        Longitude = Longitude, // Store Longitude
+                        Latitude = flat.Latitude,  // Store Latitude
+                        Longitude = flat.Longitude, // Store Longitude
                         Description = flat.Description,
                         NumberOfRooms = flat.NumberOfRooms,
                         NumberOfBathrooms = flat.NumberOfBathrooms,
@@ -263,10 +263,7 @@ namespace Ghor_Bhubon.Controllers
             return View(flat);
         }
 
-        
-
-
-
+    
 
 
     }

@@ -91,6 +91,8 @@ namespace Ghor_Bhubon.Controllers
                 Availability = "Available",  // Set availability as Available when approved
                 ImagePaths = pendingProperty.ImagePaths,
                 PdfPath = pendingProperty.PdfFilePath,
+                Latitude= pendingProperty.Latitude,
+                Longitude= pendingProperty.Longitude,
             };
 
             // Add the new Flat to the Flats table

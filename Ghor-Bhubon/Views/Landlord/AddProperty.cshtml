@@ -18,13 +18,13 @@
         <div class="form-group">
             <label for="SearchLocation">Search Location:</label>
             <input id="SearchLocation" class="form-control" type="text" placeholder="Search location..." required />
-            <input type="hidden" asp-for="Location" id="Location"> <!-- Hidden input to store location -->
+            <input type="hidden" asp-for="Location" id="Location">
         </div>
 
         <div id="map" style="height: 300px; width: 100%; margin-top: 10px;"></div>
 
-        <input type="hidden" id="Latitude" name="Latitude" />
-        <input type="hidden" id="Longitude" name="Longitude" />
+        <input type="hidden" id="Latitude" name="Latitude" asp-for="Latitude" />
+        <input type="hidden" id="Longitude" name="Longitude" asp-for="Longitude" />
 
         <div class="form-row">
             <div class="form-group">
