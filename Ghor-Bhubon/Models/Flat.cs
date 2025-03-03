@@ -38,5 +38,8 @@ namespace Ghor_Bhubon.Models
         }
 
         public string? PdfPath { get; set; }
+
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 }
