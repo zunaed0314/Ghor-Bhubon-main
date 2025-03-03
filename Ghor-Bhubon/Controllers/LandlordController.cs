@@ -83,7 +83,7 @@ namespace Ghor_Bhubon.Controllers
                         UserID = userId.Value,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
-                        Email = user.Email, // Store email
+                        Email = user.Email, 
                         Rent = flat.Rent,
                         Location = flat.Location,
                         Description = flat.Description,
@@ -120,17 +120,17 @@ namespace Ghor_Bhubon.Controllers
                     Directory.CreateDirectory(uploadFolder);
                 }
 
-                // Generate a unique file name
+                
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(Image.FileName);
                 string filePath = Path.Combine(uploadFolder, uniqueFileName);
 
-                // Save the image file
+               
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     Image.CopyTo(fileStream);
                 }
 
-                // Return JSON response with the image path
+               
                 return Json(new { success = true, imagePath = "/uploads/" + uniqueFileName });
             }
 
@@ -160,7 +160,6 @@ namespace Ghor_Bhubon.Controllers
 
             if (flat != null)
             {
-                // Optional: If you want to delete the images related to the property, you can delete the files from the server.
                 if (!string.IsNullOrEmpty(flat.ImagePaths))
                 {
                     var imagePaths = flat.ImagePaths.Split(',');
@@ -174,15 +173,12 @@ namespace Ghor_Bhubon.Controllers
                     }
                 }
 
-                // Remove the property from the database
                 _context.Flats.Remove(flat);
                 _context.SaveChanges();
 
-                // Redirect to the Dashboard after deletion
                 return RedirectToAction("Dashboard");
             }
 
-            // If flat not found, return an error page or handle appropriately
             return NotFound();
         }
 
@@ -196,7 +192,7 @@ namespace Ghor_Bhubon.Controllers
                 return NotFound();
             }
 
-            return View(flat); // Load EditProperty.cshtml with data
+            return View(flat); 
         }
 
 

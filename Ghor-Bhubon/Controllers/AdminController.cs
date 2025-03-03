@@ -1,6 +1,7 @@
 using Ghor_Bhubon.Data;
 using Ghor_Bhubon.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -30,7 +31,7 @@ namespace Ghor_Bhubon.Controllers
             var totalTenants = await _context.Users.CountAsync(u => u.Role == UserRole.Tenant);
             var totalPosts = await _context.Flats.CountAsync();
             var totalPending = await _context.PropertyPending.CountAsync();
-            /*var totalHomesRented = await _context.Flats.CountAsync(h => h.IsRented);*/
+            var totalHomesRented = await _context.Flats.CountAsync(h => h.Availability == "Available");
             /*var totalTransactions = await _context.Transactions.SumAsync(t => t.Amount);*/
             /*var totalRevenue = await _context.Transactions.Where(t => t.IsAdminFee).SumAsync(t => t.Amount);*/
 
