@@ -60,7 +60,7 @@ namespace Ghor_Bhubon.Controllers
                     }
 
                     // Handle PDF upload
-                    string pdfFilePath = null;
+                    string? pdfFilePath = null;
                     if (PropertyDocument != null && PropertyDocument.Length > 0)
                     {
                         string pdfFolder = Path.Combine(_webHostEnvironment.WebRootPath, "property_docs");
@@ -209,6 +209,8 @@ namespace Ghor_Bhubon.Controllers
             if (existingFlat != null)
             {
                 existingFlat.Location = flat.Location;
+                existingFlat.Latitude = flat.Latitude;  // Store Latitude
+                existingFlat.Longitude = flat.Longitude; // Store Longitude
                 existingFlat.Rent = flat.Rent;
                 existingFlat.NumberOfRooms = flat.NumberOfRooms;
                 existingFlat.NumberOfBathrooms = flat.NumberOfBathrooms;
