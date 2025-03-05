@@ -39,6 +39,8 @@ namespace Ghor_Bhubon.Models
         public string? ImagePaths { get; set; } // Store multiple image paths as a comma-separated string
 
         public string? PdfFilePath { get; set; } // Store the uploaded PDF file path
+        public double Longitude { get; internal set; }
+        public double Latitude { get; internal set; }
     }
 
 }

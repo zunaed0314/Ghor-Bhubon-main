@@ -1,6 +1,7 @@
 using Ghor_Bhubon.Data;
 using Ghor_Bhubon.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -30,7 +31,7 @@ namespace Ghor_Bhubon.Controllers
             var totalTenants = await _context.Users.CountAsync(u => u.Role == UserRole.Tenant);
             var totalPosts = await _context.Flats.CountAsync();
             var totalPending = await _context.PropertyPending.CountAsync();
-            /*var totalHomesRented = await _context.Flats.CountAsync(h => h.IsRented);*/
+            var totalHomesRented = await _context.Flats.CountAsync(h => h.Availability == "Available");
             /*var totalTransactions = await _context.Transactions.SumAsync(t => t.Amount);*/
             /*var totalRevenue = await _context.Transactions.Where(t => t.IsAdminFee).SumAsync(t => t.Amount);*/
 
@@ -90,6 +91,8 @@ namespace Ghor_Bhubon.Controllers
                 Availability = "Available",  // Set availability as Available when approved
                 ImagePaths = pendingProperty.ImagePaths,
                 PdfPath = pendingProperty.PdfFilePath,
+                Latitude= pendingProperty.Latitude,
+                Longitude= pendingProperty.Longitude,
             };
 
             // Add the new Flat to the Flats table
@@ -101,7 +104,7 @@ namespace Ghor_Bhubon.Controllers
             await _context.SaveChangesAsync();
 
             // Redirect to the PropertyPending list page or other page after success
-            return RedirectToAction(nameof(PendingPosts));  // Replace with the appropriate action
+            return RedirectToAction(nameof(PropertyPendingList)); // Replace with the actual action to show the list
         }
 
 

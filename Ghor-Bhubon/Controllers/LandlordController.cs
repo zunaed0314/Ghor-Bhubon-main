@@ -15,6 +15,9 @@ namespace Ghor_Bhubon.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
+        public double Longitude { get; private set; }
+        public double Latitude { get; private set; }
+
         public LandlordController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
@@ -57,7 +60,7 @@ namespace Ghor_Bhubon.Controllers
                     }
 
                     // Handle PDF upload
-                    string pdfFilePath = null;
+                    string? pdfFilePath = null;
                     if (PropertyDocument != null && PropertyDocument.Length > 0)
                     {
                         string pdfFolder = Path.Combine(_webHostEnvironment.WebRootPath, "property_docs");
@@ -86,6 +89,8 @@ namespace Ghor_Bhubon.Controllers
                         Email = user.Email, // Store email
                         Rent = flat.Rent,
                         Location = flat.Location,
+                        Latitude = flat.Latitude,  // Store Latitude
+                        Longitude = flat.Longitude, // Store Longitude
                         Description = flat.Description,
                         NumberOfRooms = flat.NumberOfRooms,
                         NumberOfBathrooms = flat.NumberOfBathrooms,
@@ -120,17 +125,17 @@ namespace Ghor_Bhubon.Controllers
                     Directory.CreateDirectory(uploadFolder);
                 }
 
-                // Generate a unique file name
+                
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(Image.FileName);
                 string filePath = Path.Combine(uploadFolder, uniqueFileName);
 
-                // Save the image file
+               
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     Image.CopyTo(fileStream);
                 }
 
-                // Return JSON response with the image path
+               
                 return Json(new { success = true, imagePath = "/uploads/" + uniqueFileName });
             }
 
@@ -160,7 +165,6 @@ namespace Ghor_Bhubon.Controllers
 
             if (flat != null)
             {
-                // Optional: If you want to delete the images related to the property, you can delete the files from the server.
                 if (!string.IsNullOrEmpty(flat.ImagePaths))
                 {
                     var imagePaths = flat.ImagePaths.Split(',');
@@ -174,15 +178,12 @@ namespace Ghor_Bhubon.Controllers
                     }
                 }
 
-                // Remove the property from the database
                 _context.Flats.Remove(flat);
                 _context.SaveChanges();
 
-                // Redirect to the Dashboard after deletion
                 return RedirectToAction("Dashboard");
             }
 
-            // If flat not found, return an error page or handle appropriately
             return NotFound();
         }
 
@@ -196,7 +197,7 @@ namespace Ghor_Bhubon.Controllers
                 return NotFound();
             }
 
-            return View(flat); // Load EditProperty.cshtml with data
+            return View(flat); 
         }
 
 
@@ -208,6 +209,8 @@ namespace Ghor_Bhubon.Controllers
             if (existingFlat != null)
             {
                 existingFlat.Location = flat.Location;
+                existingFlat.Latitude = flat.Latitude;  // Store Latitude
+                existingFlat.Longitude = flat.Longitude; // Store Longitude
                 existingFlat.Rent = flat.Rent;
                 existingFlat.NumberOfRooms = flat.NumberOfRooms;
                 existingFlat.NumberOfBathrooms = flat.NumberOfBathrooms;
@@ -262,9 +265,7 @@ namespace Ghor_Bhubon.Controllers
             return View(flat);
         }
 
-        
-
-
+    
 
 
     }

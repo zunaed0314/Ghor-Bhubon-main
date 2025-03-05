@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+<script src="https://maps.gomaps.pro/maps/api/js?key=AlzaSyfrJQX1UC6g5sIPmdYEnJtk2XPztfVjimM&libraries=places"></script>
 @if (Model != null)
 {
     <div class="property-container">
@@ -26,10 +26,13 @@
             }
         </div>
         <div class="right-side">
-            <h3>Location: @Model.Location</h3>
+           
             <p><strong>Rent:</strong> @Model.Rent TK</p>
             <p><strong>Rooms:</strong> @Model.NumberOfRooms | <strong>Bathrooms:</strong> @Model.NumberOfBathrooms</p>
             <p><strong>Description:</strong> @Model.Description</p>
+            <h3>Location: @Model.Location</h3>
+            <div id="map" style="height: 300px; width: 100%; margin-top: 10px;"></div>
+
         </div>
     </div>
     <a asp-action="EditProperty" asp-route-id="@Model.FlatID" class="btn btn-warning edit-btn">
@@ -45,4 +48,27 @@ else
     function changeImage(imageSrc) {
         document.getElementById('selectedImage').src = imageSrc;
     }
+     function initMap() {
+            // Default location (if no coordinates are available)
+            var defaultLocation = { lat: 23.8103, lng: 90.4125 }; // Dhaka, Bangladesh
+
+            var lat = parseFloat("@Model.Latitude");
+            var lng = parseFloat("@Model.Longitude");
+
+            // If valid latitude and longitude exist, use them; otherwise, use default location
+            var propertyLocation = (!isNaN(lat) && !isNaN(lng)) ? { lat: lat, lng: lng } : defaultLocation;
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: propertyLocation,
+                zoom: 15
+            });
+
+            new google.maps.Marker({
+                position: propertyLocation,
+                map: map,
+                title: "Property Location"
+            });
+        }
+
+        window.onload = initMap;
 </script>

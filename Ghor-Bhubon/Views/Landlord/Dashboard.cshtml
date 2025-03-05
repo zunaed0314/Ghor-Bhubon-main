@@ -10,7 +10,10 @@
 
 <div>
     <button><a href="@Url.Action("AddProperty", "Landlord")">Add Property</a></button>
-    <button><a href="@Url.Action("Logout", "Landlord")">Logout</a></button>
+    <form asp-action="Logout" asp-controller="Landlord" method="post">
+        <button type="submit">Logout</button>
+    </form>
+
 </div>
 
 <h2>My Properties</h2>
