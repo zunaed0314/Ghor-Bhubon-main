@@ -91,8 +91,8 @@ namespace Ghor_Bhubon.Controllers
                 Availability = "Available",  // Set availability as Available when approved
                 ImagePaths = pendingProperty.ImagePaths,
                 PdfPath = pendingProperty.PdfFilePath,
-                Latitude= pendingProperty.Latitude,
-                Longitude= pendingProperty.Longitude,
+                Latitude = pendingProperty.Latitude,
+                Longitude = pendingProperty.Longitude,
             };
 
             // Add the new Flat to the Flats table
@@ -104,7 +104,7 @@ namespace Ghor_Bhubon.Controllers
             await _context.SaveChangesAsync();
 
             // Redirect to the PropertyPending list page or other page after success
-            return RedirectToAction(nameof(PropertyPendingList)); // Replace with the actual action to show the list
+            return RedirectToAction(nameof(PendingPosts)); // Replace with the actual action to show the list
         }
 
 
