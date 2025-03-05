@@ -2,14 +2,21 @@
 
 <h2>Edit Property Details</h2>
 <link rel="stylesheet" href="~/css/PropertyDetails.css">
-
+<script src="https://maps.gomaps.pro/maps/api/js?key=AlzaSyiePM7XusDCrwGrxl62P8KWn8qr97UeknN&libraries=places"></script>
 <form asp-action="SaveEditedProperty" asp-controller="Landlord" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="FlatID" />
 
     <div class="form-group">
         <label>Location:</label>
         <input asp-for="Location" class="form-control" required />
+
     </div>
+   
+
+    <div id="map" style="height: 300px; width: 100%; margin-top: 10px;"></div>
+
+    <input type="hidden" id="Latitude" name="Latitude" asp-for="Latitude" />
+    <input type="hidden" id="Longitude" name="Longitude" asp-for="Longitude" />
 
     <div class="form-group">
         <label>Rent:</label>
@@ -53,3 +60,50 @@
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
+<script>
+    function initAutocomplete() {
+        var input = document.getElementById('Location');
+        var locationInput = document.getElementById('Location');
+        var latitudeInput = document.getElementById('Latitude');
+        var longitudeInput = document.getElementById('Longitude');
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 23.8103, lng: 90.4125 }, // Default location (Dhaka, Bangladesh)
+            zoom: 13
+        });
+
+        var marker = new google.maps.Marker({
+            map: map,
+            draggable: true
+        });
+
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+
+        autocomplete.addListener('place_changed', function () {
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                return;
+            }
+
+            // Set location values
+            locationInput.value = place.formatted_address;
+            latitudeInput.value = place.geometry.location.lat();
+            longitudeInput.value = place.geometry.location.lng();
+
+            // Set marker on the map
+            marker.setPosition(place.geometry.location);
+            map.setCenter(place.geometry.location);
+            map.setZoom(15);
+        });
+
+        // Allow dragging marker to get coordinates
+        google.maps.event.addListener(marker, 'dragend', function () {
+            var newLatLng = marker.getPosition();
+            latitudeInput.value = newLatLng.lat();
+            longitudeInput.value = newLatLng.lng();
+        });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initAutocomplete);
+</script>
