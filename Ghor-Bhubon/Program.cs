@@ -10,6 +10,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSignalR();
+
 // Enable session management
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ghor_Bhubon.Controllers
 {
@@ -86,16 +87,19 @@ namespace Ghor_Bhubon.Controllers
                         UserID = userId.Value,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
-                        Email = user.Email, // Store email
+                        Email = user.Email,
                         Rent = flat.Rent,
                         Location = flat.Location,
-                        Latitude = flat.Latitude,  // Store Latitude
-                        Longitude = flat.Longitude, // Store Longitude
+                        Latitude = flat.Latitude,
+                        Longitude = flat.Longitude,
                         Description = flat.Description,
                         NumberOfRooms = flat.NumberOfRooms,
                         NumberOfBathrooms = flat.NumberOfBathrooms,
                         ImagePaths = uploadedImages,
-                        PdfFilePath = pdfFilePath
+                        PdfFilePath = pdfFilePath,
+                        City = flat.City,
+                        Area = flat.Area,
+                        AvailableFrom=flat.AvailableFrom
                     };
 
                     _context.PropertyPending.Add(propertyPending);
@@ -105,6 +109,16 @@ namespace Ghor_Bhubon.Controllers
                 }
 
                 ModelState.AddModelError("", "User not found.");
+            }
+            else
+            {
+
+                {
+                    foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        Console.WriteLine(error.ErrorMessage); // or log this
+                    }
+                }
             }
 
             return View(flat);
@@ -125,17 +139,17 @@ namespace Ghor_Bhubon.Controllers
                     Directory.CreateDirectory(uploadFolder);
                 }
 
-                
+
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(Image.FileName);
                 string filePath = Path.Combine(uploadFolder, uniqueFileName);
 
-               
+
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     Image.CopyTo(fileStream);
                 }
 
-               
+
                 return Json(new { success = true, imagePath = "/uploads/" + uniqueFileName });
             }
 
@@ -197,7 +211,7 @@ namespace Ghor_Bhubon.Controllers
                 return NotFound();
             }
 
-            return View(flat); 
+            return View(flat);
         }
 
 
@@ -265,7 +279,23 @@ namespace Ghor_Bhubon.Controllers
             return View(flat);
         }
 
-    
+
+        [HttpGet]
+        public IActionResult GetMatchingAreas(string city, string area)
+        {
+            if (string.IsNullOrEmpty(city) || string.IsNullOrEmpty(area))
+            {
+                return Json(new List<string>());
+            }
+
+            // Query Areas based on selected city and area
+            var matchingAreas = _context.Areas
+                .Where(a => a.City.Name == city && EF.Functions.Like(a.Name, area + "%")) // Case-insensitive match
+                .Select(a => a.Name)
+                .ToList();
+
+            return Json(matchingAreas);
+        }
 
 
     }
