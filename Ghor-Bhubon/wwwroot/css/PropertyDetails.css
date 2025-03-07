@@ -1,5 +1,5 @@
 ﻿body{
-    min-height:100vh;
+    max-height:100vh;
    
 }
 
@@ -78,7 +78,7 @@
     width: auto; 
     position:absolute;
     left:58.5vw;
-    bottom:20vh;
+    bottom:7vh;
 }
 
     .edit-btn i {
