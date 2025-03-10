@@ -80,7 +80,7 @@ namespace Ghor_Bhubon.Controllers
             switch (user.Role)
             {
                 case UserRole.Tenant:
-                    return RedirectToAction("TenantDashboard", "Home");
+                    return RedirectToAction("TenantDashboard", "Tenant");
                 case UserRole.Landlord:
                     return RedirectToAction("Dashboard", "LandLord");
                 case UserRole.Admin:

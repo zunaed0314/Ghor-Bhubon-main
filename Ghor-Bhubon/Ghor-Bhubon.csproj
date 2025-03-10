@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Tenant\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
