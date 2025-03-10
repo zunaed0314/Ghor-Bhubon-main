@@ -41,5 +41,12 @@ namespace Ghor_Bhubon.Models
 
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+
+
+        public string City { get; set; } // Add City
+        public string Area { get; set; } // Add Area
+
+        [Required]
+        public DateOnly AvailableFrom { get; set; }
     }
 }

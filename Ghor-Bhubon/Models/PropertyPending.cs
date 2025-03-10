@@ -41,6 +41,15 @@ namespace Ghor_Bhubon.Models
         public string? PdfFilePath { get; set; } // Store the uploaded PDF file path
         public double Longitude { get; internal set; }
         public double Latitude { get; internal set; }
+
+        [Required]
+        public string? City { get; set; }
+
+        [Required]
+        public string? Area { get; set; }
+
+        [Required]
+        public DateOnly AvailableFrom { get; set; }
     }
 
 }

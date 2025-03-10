@@ -93,6 +93,9 @@ namespace Ghor_Bhubon.Controllers
                 PdfPath = pendingProperty.PdfFilePath,
                 Latitude = pendingProperty.Latitude,
                 Longitude = pendingProperty.Longitude,
+                City = pendingProperty.City,
+                Area = pendingProperty.Area,
+                AvailableFrom=pendingProperty.AvailableFrom
             };
 
             // Add the new Flat to the Flats table
