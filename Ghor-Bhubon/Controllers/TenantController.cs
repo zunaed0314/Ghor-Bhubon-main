@@ -24,5 +24,20 @@ namespace Ghor_Bhubon.Controllers
             return View(flats);
         }
 
+
+
+        public IActionResult ViewProperty(int id)
+        {
+            var flat = _context.Flats.FirstOrDefault(f => f.FlatID == id);
+            if (flat == null)
+            {
+                return NotFound();
+            }
+
+            Console.WriteLine("Property Image Paths: " + flat.ImagePaths); // Debugging
+
+            return View(flat);
+        }
+
     }
 }

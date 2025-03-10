@@ -97,6 +97,10 @@
     }
 </style>
 @model List<Ghor_Bhubon.Models.Flat>
+<link rel="stylesheet" href="~/css/PropertyDetails.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <body>
     <!-- Header and Navbar -->
     <header>
@@ -159,7 +163,7 @@
             <div class="filters">
                 <h5>Filters</h5>
                 <div class="mb-3">
-                    <label for="locationFilter" class="form-label">Location</label>
+                    <label for="locationFilter" class="form-label">Location (City and Area)</label>
                     <input type="text" id="locationFilter" class="form-control" placeholder="Enter location">
                 </div>
                 <div class="mb-3">
@@ -194,10 +198,11 @@
 
                             <div class="card-body">
                                 <h5 class="card-title">@item.Description</h5>
-                                <p class="card-text">@item.Location</p>
+                                <p class="card-text">@item.City,@item.Area</p>
+
                                 <p class="card-text"><strong>Rent:</strong> $@item.Rent</p>
                                 <p class="card-text"><strong>Rooms:</strong> @item.NumberOfRooms | <strong>Bathrooms:</strong> @item.NumberOfBathrooms</p>
-                                <button class="btn btn-primary w-100">View Details</button>
+                                <a href="@Url.Action("ViewProperty", "Tenant", new { id = item.FlatID })" class="view-more-btn">View More Details</a>
                             </div>
                         </div>
                     </div>
