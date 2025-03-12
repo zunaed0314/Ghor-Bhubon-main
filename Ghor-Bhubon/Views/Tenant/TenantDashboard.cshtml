@@ -86,7 +86,7 @@
 
     .property-image {
         height: 200px;
-        object-fit: cover;
+        object-fit: contain;
     }
 
     .filters {
@@ -94,6 +94,10 @@
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .cardimg{
+        object-fit:contain;
     }
 </style>
 @model List<Ghor_Bhubon.Models.Flat>
@@ -194,7 +198,7 @@
                     <div class="col-md-4 mb-4">
                         <div class="card property-card">
                                 <img src="@(item.ImagePathList != null && item.ImagePathList.Any() ? item.ImagePathList.First() : "/images/default.jpg")"
-                                     class="card-img-top property-image" alt="Property Image">
+                                     class="card-img-top property-image cardimg" alt="Property Image">
 
                             <div class="card-body">
                                 <h5 class="card-title">@item.Description</h5>
@@ -273,10 +277,11 @@
                 }
             });
         }
+
     </script>
 
 
     
 
   
-</body>
+</body> 
