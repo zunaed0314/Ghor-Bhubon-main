@@ -4,11 +4,124 @@
 
 @model List<Ghor_Bhubon.Models.Flat>
 
+<style>
+    .container {
+        max-height: none;
+        overflow: visible;
+
+    }
+    .conr{
+        margin-top: 80px; /* Adjust based on navbar height */
+        padding: 20px; /* Add padding to make it look nice */
+        margin-bottom:80px;
+    }
+
+    .navbar {
+        width: 100%; /* Full width */
+        position: fixed; /* Fixed at the top */
+        top: 0; /* Stick to top */
+        left: 0;
+        background-color: #02c9b6; /* Light blue background */
+        padding: 10px 20px; /* Add some padding */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000; /* Ensure it stays on top */
+        border-bottom: 1px solid #ddd;
+
+       
+    }
+
+    .navbar-nav .nav-link {
+        color: #f9f9f9 !important;
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+        .navbar-brand img {
+            height: 30px;
+            margin-right: 10px;
+        }
+
+    .nav-link {
+        color: #000 !important;
+        font-weight: 500;
+    }
+
+    .action-buttons button {
+        margin-left: 10px;
+    }
+
+    .categories {
+        display: flex;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        background-color: #f9f9f9;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+    }
+
+        .categories .category-btn {
+            margin: 0 5px;
+            font-weight: 500;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background-color: #fff;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+            .categories .category-btn:hover {
+                background-color: #e9ecef;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+    footer {
+        background-color: #02c9b6;
+        color: #ffffff;
+        padding: 20px 0;
+    }
+
+    .footer-links a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+    .property-card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+    }
+
+        .property-card:hover {
+            transform: scale(1.02);
+        }
+
+    .property-image {
+        height: 200px;
+        object-fit: contain;
+    }
+
+    .filters {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .cardimg {
+        object-fit: contain;
+    }
+</style>
 <link rel="stylesheet" href="~/css/Properties.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/signalr/3.1.17/signalr.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.7/signalr.min.js"></script>
-
-
 
 <h2>Landlord Dashboard</h2>
 
@@ -17,29 +130,30 @@
     <form asp-action="Logout" asp-controller="User" method="post">
         <button type="submit">Logout</button>
     </form>
+
 </div>
 
-<h2>My Properties</h2>
 
 @if (Model != null && Model.Any())
 {
-    <div class="property-grid" id="propertyGrid">
+    <div class="property-grid">
         @foreach (var flat in Model)
         {
-            <div class="property" id="property-@flat.FlatID">
+            <div class="property">
                 @if (!string.IsNullOrEmpty(flat.ImagePaths))
                 {
                     var images = flat.ImagePaths.Split(",");
                     <div class="property-images">
-                        <img src="@images[0].Trim()" alt="Property Image" class="property-image" />
+                        <img src="@images[0].Trim()" alt="Property Image" class="property-image" /> 
                     </div>
                 }
 
                 <h3>@flat.Area, @flat.City</h3>
                 <p><strong>Rent:</strong> @flat.Rent TK</p>
                 <p><strong>Rooms:</strong> @flat.NumberOfRooms | <strong>Bathrooms:</strong> @flat.NumberOfBathrooms</p>
+                @* <p><strong>Description:</strong> @flat.Description</p> *@
 
-                <a href="@Url.Action("PropertyDetails", "Landlord", new { id = flat.FlatID })" class="view-more-btn">View More Details</a>
+                        <a href="@Url.Action("PropertyDetails", "Landlord", new { id = flat.FlatID })" class="view-more-btn">View More Details</a>
 
                 <!-- Delete Button -->
                 <form asp-action="DeleteProperty" asp-controller="Landlord" method="post" onsubmit="return confirm('Are you sure you want to delete this property?');">
@@ -54,6 +168,3 @@ else
 {
     <p>No properties added yet.</p>
 }
-
-<script src="~/js/propadd.js"></script>
-

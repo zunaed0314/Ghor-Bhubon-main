@@ -5,9 +5,17 @@
     }
 
     .navbar {
+        width: 100%; /* Full width */
+        position: fixed; /* Fixed at the top */
+        top: 0; /* Stick to top */
+        left: 0;
+        background-color: #6ab0f3; /* Light blue background */
+        padding: 10px 20px; /* Add some padding */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000; /* Ensure it stays on top */
         border-bottom: 1px solid #ddd;
-        padding: 0.5rem 1rem;
-        background-color: #8ccbf1;
     }
 
     .navbar-nav .nav-link {
@@ -59,10 +67,16 @@
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
 
-    footer {
+    .footer {
         background-color: #8ccbf1;
         color: #ffffff;
         padding: 20px 0;
+        width: 100%;
+        display:flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000; /* Ensure it stays on top */
+        border-bottom: 1px solid #ddd;
     }
 
     .footer-links a {
@@ -218,34 +232,34 @@
             </div>
         </div>
 
-        <!-- Footer -->
-        <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4 mb-3">
-                        <h5>About Ghor Bhubon</h5>
-                        <p>Ghor Bhubon is a platform that connects home renters and landlords for seamless property renting. Explore properties and manage your listings with ease!</p>
-                    </div>
-                    <div class="col-lg-4 mb-3">
-                        <h5>Quick Links</h5>
-                        <ul class="list-unstyled footer-links">
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Renters</a></li>
-                            <li><a href="#">Landlords</a></li>
-                            <li><a href="#">Contact Us</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-4 mb-3">
-                        <h5>Contact Us</h5>
-                        <p>Email: support@rentease.com</p>
-                        <p>Phone: +123 456 7890</p>
-                    </div>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-3">
+                    <h5>About Ghor Bhubon</h5>
+                    <p>Ghor Bhubon is a platform that connects home renters and landlords for seamless property renting. Explore properties and manage your listings with ease!</p>
                 </div>
-                <div class="text-center mt-3">
-                    <p>&copy; 2025 RentEase. All Rights Reserved.</p>
+                <div class="col-lg-4 mb-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Renters</a></li>
+                        <li><a href="#">Landlords</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <h5>Contact Us</h5>
+                    <p>Email: support@rentease.com</p>
+                    <p>Phone: +123 456 7890</p>
                 </div>
             </div>
-        </footer>
+            <div class="text-center mt-3">
+                <p>&copy; 2025 RentEase. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
