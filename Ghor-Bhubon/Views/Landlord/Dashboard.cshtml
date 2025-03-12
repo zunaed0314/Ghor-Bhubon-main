@@ -5,6 +5,10 @@
 @model List<Ghor_Bhubon.Models.Flat>
 
 <link rel="stylesheet" href="~/css/Properties.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signalr/3.1.17/signalr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.7/signalr.min.js"></script>
+
+
 
 <h2>Landlord Dashboard</h2>
 
@@ -13,29 +17,27 @@
     <form asp-action="Logout" asp-controller="User" method="post">
         <button type="submit">Logout</button>
     </form>
-
 </div>
 
 <h2>My Properties</h2>
 
 @if (Model != null && Model.Any())
 {
-    <div class="property-grid">
+    <div class="property-grid" id="propertyGrid">
         @foreach (var flat in Model)
         {
-            <div class="property">
+            <div class="property" id="property-@flat.FlatID">
                 @if (!string.IsNullOrEmpty(flat.ImagePaths))
                 {
                     var images = flat.ImagePaths.Split(",");
                     <div class="property-images">
-                        <img src="@images[0].Trim()" alt="Property Image" class="property-image" /> 
+                        <img src="@images[0].Trim()" alt="Property Image" class="property-image" />
                     </div>
                 }
 
                 <h3>@flat.Area, @flat.City</h3>
                 <p><strong>Rent:</strong> @flat.Rent TK</p>
                 <p><strong>Rooms:</strong> @flat.NumberOfRooms | <strong>Bathrooms:</strong> @flat.NumberOfBathrooms</p>
-                @* <p><strong>Description:</strong> @flat.Description</p> *@
 
                 <a href="@Url.Action("PropertyDetails", "Landlord", new { id = flat.FlatID })" class="view-more-btn">View More Details</a>
 
@@ -52,3 +54,6 @@ else
 {
     <p>No properties added yet.</p>
 }
+
+<script src="~/js/propadd.js"></script>
+

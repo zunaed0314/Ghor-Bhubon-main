@@ -27,7 +27,7 @@ builder.Services.AddScoped<PropertyService>();
 
 var app = builder.Build();
 
-// Seed the admin user (this is good for setting up initial data, assuming you need this)
+
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -49,9 +49,10 @@ app.UseRouting();
 
 // Mapping SignalR Hubs
 
-app.MapHub<PendingPostHub>("/pendingPostHub"); // Map PendingPostHub
+app.MapHub<PendingPostHub>("/pendingPostHub");
+app.MapHub<PropertyHub>("/propertyHub");    
 
-app.UseSession(); // Session management (ensure it's used in your controllers if needed)
+app.UseSession(); 
 
 app.UseAuthorization();
 

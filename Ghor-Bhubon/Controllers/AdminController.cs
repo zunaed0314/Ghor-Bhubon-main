@@ -18,14 +18,16 @@ namespace Ghor_Bhubon.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly PropertyService _propertyService;
         private readonly IHubContext<PendingPostHub> _hubContext;  // Inject the IHubContext
+        private readonly IHubContext<PropertyHub> _hubContext2;
 
         // Modify the constructor to accept IHubContext
-        public AdminController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, PropertyService propertyService, IHubContext<PendingPostHub> hubContext)
+        public AdminController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, PropertyService propertyService, IHubContext<PendingPostHub> hubContext, IHubContext<PropertyHub> hubContext2)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
             _propertyService = propertyService;
             _hubContext = hubContext;  // Assign the hub context
+            _hubContext2 = hubContext2;
         }
 
         public async Task<IActionResult> AdminDashBoard()
@@ -39,14 +41,14 @@ namespace Ghor_Bhubon.Controllers
             var totalPosts = await _context.Flats.CountAsync();
             var totalPending = await _context.PropertyPending.CountAsync();
             var totalHomesRented = await _context.Flats.CountAsync(h => h.Availability == "Available");
-            /*var totalTransactions = await _context.Transactions.SumAsync(t => t.Amount);*/
-            /*var totalRevenue = await _context.Transactions.Where(t => t.IsAdminFee).SumAsync(t => t.Amount);*/
+            var totalTransactions = await _context.Transactions.Where(t => t.Status == "valid").SumAsync(t => t.Amount);
+            var transactions = await _context.Transactions.SumAsync(t => t.Amount);
 
             var newUsersThisMonth = await _context.Users.CountAsync(u => u.CreatedAt.Month == currentMonth && u.CreatedAt.Year == currentYear);
             /*var newPostsThisMonth = await _context.Posts.CountAsync(p => p.CreatedAt.Month == currentMonth && p.CreatedAt.Year == currentYear);*/
             /*var housesRentedThisMonth = await _context.Homes.CountAsync(h => h.RentedAt.Month == currentMonth && h.RentedAt.Year == currentYear);*/
-            /*var transactionsThisMonth = await _context.Transactions.Where(t => t.CreatedAt.Month == currentMonth && t.CreatedAt.Year == currentYear).SumAsync(t => t.Amount);*/
-            /*var revenueThisMonth = await _context.Transactions.Where(t => t.IsAdminFee && t.CreatedAt.Month == currentMonth && t.CreatedAt.Year == currentYear).SumAsync(t => t.Amount);*/
+            var transactionsThisMonth = await _context.Transactions.Where(t => t.TransactionDate.Month == currentMonth && t.TransactionDate.Year == currentYear && t.Status == "valid").SumAsync(t => t.Amount);
+            var revenueThisMonth = await _context.Transactions.Where(t => t.Amount > 0 && t.TransactionDate.Month == currentMonth && t.TransactionDate.Year == currentYear && t.Status == "valid").SumAsync(t => t.Amount);
 
             var model = new AdminDashboardViewModel
             {
@@ -56,13 +58,13 @@ namespace Ghor_Bhubon.Controllers
                 TotalPosts = totalPosts,
                 TotalPending = totalPending,
                 /*TotalHomesRented = totalHomesRented,*/
-                /*TotalTransactions = totalTransactions,*/
+                TotalTransactions = totalTransactions,
                 /*TotalRevenue = totalRevenue,*/
                 NewUsersThisMonth = newUsersThisMonth,
                 /*NewPostsThisMonth = newPostsThisMonth,*/
                 /*HousesRentedThisMonth = housesRentedThisMonth,*/
-                /*TransactionsThisMonth = transactionsThisMonth,*/
-                /*RevenueThisMonth = revenueThisMonth*/
+                TransactionsThisMonth = transactionsThisMonth,
+                RevenueThisMonth = revenueThisMonth
             };
 
             return View(model);
@@ -112,6 +114,8 @@ namespace Ghor_Bhubon.Controllers
             // Notify all clients that a property has been approved
             var totalPending = await _context.PropertyPending.CountAsync();
             await _hubContext.Clients.All.SendAsync("ReceivePendingPostUpdate", totalPending);
+
+            await _hubContext2.Clients.All.SendAsync("NewPropertyAdded", newFlat);
 
             return RedirectToAction(nameof(PendingPosts));
         }
