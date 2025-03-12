@@ -1,9 +1,11 @@
 using Ghor_Bhubon.Data;
 using Ghor_Bhubon.Models;
+using Ghor_Bhubon.Hubs;  // Add this for the SignalR Hub
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;  // Add this for SignalR
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,11 +16,16 @@ namespace Ghor_Bhubon.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly PropertyService _propertyService;
+        private readonly IHubContext<PendingPostHub> _hubContext;  // Inject the IHubContext
 
-        public AdminController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        // Modify the constructor to accept IHubContext
+        public AdminController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, PropertyService propertyService, IHubContext<PendingPostHub> hubContext)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _propertyService = propertyService;
+            _hubContext = hubContext;  // Assign the hub context
         }
 
         public async Task<IActionResult> AdminDashBoard()
@@ -69,7 +76,6 @@ namespace Ghor_Bhubon.Controllers
 
         public async Task<IActionResult> Approve(int id)
         {
-            // Fetch the property details from PropertyPending table by ID
             var pendingProperty = await _context.PropertyPending
                                                  .Where(p => p.ID == id)
                                                  .FirstOrDefaultAsync();
@@ -79,7 +85,6 @@ namespace Ghor_Bhubon.Controllers
                 return NotFound();
             }
 
-            // Create a new Flat object using the PropertyPending data
             var newFlat = new Flat
             {
                 UserID = pendingProperty.UserID,
@@ -88,68 +93,125 @@ namespace Ghor_Bhubon.Controllers
                 Description = pendingProperty.Description,
                 NumberOfRooms = pendingProperty.NumberOfRooms,
                 NumberOfBathrooms = pendingProperty.NumberOfBathrooms,
-                Availability = "Available",  // Set availability as Available when approved
+                Availability = "Available",
                 ImagePaths = pendingProperty.ImagePaths,
                 PdfPath = pendingProperty.PdfFilePath,
                 Latitude = pendingProperty.Latitude,
                 Longitude = pendingProperty.Longitude,
                 City = pendingProperty.City,
                 Area = pendingProperty.Area,
-                AvailableFrom=pendingProperty.AvailableFrom
+                AvailableFrom = pendingProperty.AvailableFrom
             };
 
-            // Add the new Flat to the Flats table
             _context.Flats.Add(newFlat);
             await _context.SaveChangesAsync();
 
-            // Remove the corresponding record from PropertyPending table
             _context.PropertyPending.Remove(pendingProperty);
             await _context.SaveChangesAsync();
 
-            // Redirect to the PropertyPending list page or other page after success
-            return RedirectToAction(nameof(PendingPosts)); // Replace with the actual action to show the list
-        }
+            // Notify all clients that a property has been approved
+            var totalPending = await _context.PropertyPending.CountAsync();
+            await _hubContext.Clients.All.SendAsync("ReceivePendingPostUpdate", totalPending);
 
+            return RedirectToAction(nameof(PendingPosts));
+        }
 
         public async Task<IActionResult> Decline(int id)
         {
-            // Fetch the property details from PropertyPending table by ID
             var pendingProperty = await _context.PropertyPending
                                                  .Where(p => p.ID == id)
                                                  .FirstOrDefaultAsync();
 
             if (pendingProperty == null)
             {
-                return NotFound();  // If the property is not found, return 404
+                return NotFound();
             }
 
-            // Remove the PropertyPending entry from the database
             _context.PropertyPending.Remove(pendingProperty);
             await _context.SaveChangesAsync();
 
-            // Redirect to the list of pending properties or other page after success
-            return RedirectToAction(nameof(PendingPosts));  // Replace with the appropriate action
+            // Notify all clients that a property has been declined
+            var totalPending = await _context.PropertyPending.CountAsync();
+            await _hubContext.Clients.All.SendAsync("ReceivePendingPostUpdate", totalPending);
+
+            return RedirectToAction(nameof(PendingPosts));
         }
+
+
+        ///ekhaneeee
+        public async Task<IActionResult> Valid(string id)
+        {
+            // Fetch the transaction by TransactionID
+            var transaction = await _context.Transactions
+                                            .FirstOrDefaultAsync(t => t.TransactionID == id);
+
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+            transaction.Status = "valid";
+            // Fetch the corresponding Flat using FlatID from the transaction
+            var flat = await _context.Flats.FirstOrDefaultAsync(f => f.FlatID == transaction.FlatID);
+
+            if (flat == null)
+            {
+                return NotFound(); // If no flat is found, return 404
+            }
+
+            // Update the Flat's availability to "Unavailable"
+            flat.Availability = "Unavailable";
+            
+            // Save the changes to the database
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Expenses)); // Redirect to the pending posts page
+        }
+
+
+
+        public async Task<IActionResult> Fraud(string id)
+        {
+            // Fetch the transaction details from PropertyPending table by ID
+            var transaction = await _context.Transactions
+                                                 .Where(p => p.TransactionID == id)
+                                                 .FirstOrDefaultAsync();
+
+            if (transaction == null)
+            {
+                return NotFound();  // If the property is not found, return 404
+            }
+
+            // Remove the transactions entry from the database
+            _context.Transactions.Remove(transaction);
+            await _context.SaveChangesAsync();
+
+            // Redirect to the list of expenses or other page after success
+            return RedirectToAction(nameof(Expenses));  // Replace with the appropriate action
+        }
+        ///sesh
+
+
+
+
 
         public async Task<IActionResult> PropertyDetailsPending(int id)
         {
-            // Fetch the property details from PropertyPending by ID
             var propertyPending = await _context.PropertyPending
                                                  .Where(p => p.ID == id)
                                                  .FirstOrDefaultAsync();
 
             if (propertyPending == null)
             {
-                return NotFound(); // Return 404 if the property is not found
+                return NotFound();
             }
 
-            // Return the PropertyPending details view
             return View(propertyPending);
         }
 
-        public IActionResult Expenses()
+        public async Task<IActionResult> Expenses()
         {
-            return View();
+            var transactions = await _context.Transactions.ToListAsync();
+            return View(transactions);
         }
 
         public async Task<IActionResult> ViewLandlords()
@@ -203,7 +265,6 @@ namespace Ghor_Bhubon.Controllers
             return RedirectToAction("AdminDashBoard");
         }
 
-
         public IActionResult LandlordDashboard(int id)
         {
             var landlord = _context.Users.FirstOrDefault(u => u.UserID == id);
@@ -212,7 +273,6 @@ namespace Ghor_Bhubon.Controllers
                 return NotFound();
             }
 
-            // Fetch flats where UserID (landlord ID) matches the given id
             var flats = _context.Flats.Where(f => f.UserID == id).ToList();
             return View("LandlordProperties", flats);
         }

@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using Ghor_Bhubon.Hubs;
 
 namespace Ghor_Bhubon.Controllers
 {
@@ -15,15 +17,21 @@ namespace Ghor_Bhubon.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IHubContext<PendingPostHub> _pendingPostHub;
 
-        public double Longitude { get; private set; }
-        public double Latitude { get; private set; }
 
-        public LandlordController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public LandlordController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, IHubContext<PendingPostHub> pendingPostHub)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _pendingPostHub = pendingPostHub;
         }
+        public double Longitude { get; private set; }
+        public double Latitude { get; private set; }
+
+
+
+        
 
         public IActionResult Dashboard()
         {
@@ -44,7 +52,7 @@ namespace Ghor_Bhubon.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProperty(Flat flat, string uploadedImages, IFormFile PropertyDocument)
+        public async Task<IActionResult> AddProperty(Flat flat, string uploadedImages, IFormFile PropertyDocument)
         {
             if (ModelState.IsValid)
             {
@@ -53,7 +61,7 @@ namespace Ghor_Bhubon.Controllers
                 if (userId.HasValue)
                 {
                     // Retrieve User details from database
-                    var user = _context.Users.FirstOrDefault(u => u.UserID == userId.Value);
+                    var user = await _context.Users.FirstOrDefaultAsync(u => u.UserID == userId.Value);
                     if (user == null)
                     {
                         ModelState.AddModelError("", "User not found.");
@@ -75,7 +83,7 @@ namespace Ghor_Bhubon.Controllers
 
                         using (var stream = new FileStream(pdfPath, FileMode.Create))
                         {
-                            PropertyDocument.CopyTo(stream);
+                            await PropertyDocument.CopyToAsync(stream); // Use async method
                         }
 
                         pdfFilePath = "/property_docs/" + uniquePdfName;
@@ -103,7 +111,12 @@ namespace Ghor_Bhubon.Controllers
                     };
 
                     _context.PropertyPending.Add(propertyPending);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync(); // Use async method
+
+                    int totalPending = await _context.PropertyPending.CountAsync(); // Use async
+
+                    // Send real-time update to SignalR clients
+                    await _pendingPostHub.Clients.All.SendAsync("ReceivePendingPostUpdate", totalPending);
 
                     return RedirectToAction("Dashboard");
                 }
@@ -112,17 +125,15 @@ namespace Ghor_Bhubon.Controllers
             }
             else
             {
-
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
                 {
-                    foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                    {
-                        Console.WriteLine(error.ErrorMessage); // or log this
-                    }
+                    Console.WriteLine(error.ErrorMessage); // Log errors if needed
                 }
             }
 
             return View(flat);
         }
+
 
 
 

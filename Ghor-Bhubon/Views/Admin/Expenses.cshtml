@@ -34,6 +34,11 @@
             </ul>
         </li>
     </ul>
+    <form asp-action="Logout" asp-controller="User" method="post">
+        <button type="submit" class="btn btn-danger w-100 text-left">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </form>
 </div>
 
 <!-- Hamburger Button (Three Stacked Lines) -->
@@ -45,90 +50,150 @@
 
 <!-- Style for Hover and Click Effects -->
 <style>
-    /* Sidebar hover effects */
     #sidebar .nav-link {
-        transition: background-color 0.3s, color 0.3s, transform 0.3s, text-shadow 0.3s;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s, text-shadow 0.3s;
     }
 
-        /* 3D text effect on hover */
-        #sidebar .nav-link:hover {
-            background-color: #495057;
-            color: #fff;
-            transform: translateX(5px) translateY(-5px);
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4), -2px -2px 5px rgba(0, 0, 0, 0.4);
-        }
+    #sidebar .nav-link:hover {
+    background-color: #495057;
+    color: #fff;
+    transform: translateX(5px) translateY(-5px);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4), -2px -2px 5px rgba(0, 0, 0, 0.4);
+    }
 
-        /* Active link effect */
-        #sidebar .nav-link.active {
-            background-color: #007bff;
-            color: #fff;
-        }
+    #sidebar .nav-link.active {
+    background-color: #007bff;
+    color: #fff;
+    }
 
-    /* Hover effect on hamburger button */
     #toggleSidebar div {
-        transition: background-color 0.3s;
+    transition: background-color 0.3s;
     }
 
-        #toggleSidebar div:hover {
-            background-color: #555;
-        }
+    #toggleSidebar div:hover {
+    background-color: #555;
+    }
 
-    /* Submenu styling */
     #manageUsersSubmenu {
-        background: #343a40;
-        border-left: 3px solid #007bff;
+    background: #343a40;
+    border-left: 3px solid #007bff;
     }
 
-        #manageUsersSubmenu .nav-link {
-            padding-left: 20px;
-        }
+    #manageUsersSubmenu .nav-link {
+    padding-left: 20px;
+    }
 
-    /* Rotate arrow when submenu opens */
     .rotate {
-        transform: rotate(180deg);
-        transition: transform 0.3s ease;
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+    }
+
+    .table {
+    border-radius: 10px;
+    overflow: hidden;
+    }
+
+    thead {
+    font-size: 18px;
+    }
+
+    tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.02);
+    transition: 0.3s ease-in-out;
+    }
+
+    .btn-danger {
+    transition: 0.3s;
+    }
+
+    .btn-danger:hover {
+    background-color: #dc3545;
+    box-shadow: 0px 5px 10px rgba(220, 53, 69, 0.4);
     }
 </style>
 
-<!-- JavaScript for Sidebar Toggle and Submenu -->
 <script>
     document.getElementById("toggleSidebar").addEventListener("click", function () {
-        var sidebar = document.getElementById("sidebar");
-        var button = document.getElementById("toggleSidebar");
+    var sidebar = document.getElementById("sidebar");
+    var button = document.getElementById("toggleSidebar");
+    var content = document.getElementById("contentWrapper");
 
-        if (sidebar.style.left === "0px") {
-            sidebar.style.left = "-250px";  // Close sidebar
-            button.style.left = "20px";     // Move button back
-        } else {
-            sidebar.style.left = "0px";     // Open sidebar
-            button.style.left = "250px";    // Move button inside
-        }
+    if (sidebar.style.left === "0px") {
+    sidebar.style.left = "-250px";
+    button.style.left = "20px";
+    content.style.marginLeft = "0";
+    } else {
+    sidebar.style.left = "0px";
+    button.style.left = "250px";
+    content.style.marginLeft = "250px";
+    }
     });
 
-    // Toggle Manage Users Submenu
     document.getElementById("manageUsersToggle").addEventListener("click", function (event) {
-        event.preventDefault();  // Prevent default anchor behavior
-        var submenu = document.getElementById("manageUsersSubmenu");
-        var icon = this.querySelector("i");
+    event.preventDefault();
+    var submenu = document.getElementById("manageUsersSubmenu");
+    var icon = this.querySelector("i");
 
-        if (submenu.style.display === "none") {
-            submenu.style.display = "block";
-            icon.classList.add("rotate");
-        } else {
-            submenu.style.display = "none";
-            icon.classList.remove("rotate");
-        }
+    if (submenu.style.display === "none") {
+    submenu.style.display = "block";
+    icon.classList.add("rotate");
+    } else {
+    submenu.style.display = "none";
+    icon.classList.remove("rotate");
+    }
     });
 
-    // Add click effect to each link
     const navLinks = document.querySelectorAll("#sidebar .nav-link");
     navLinks.forEach(link => {
-        link.addEventListener("click", function () {
-            navLinks.forEach(l => l.classList.remove("active"));
-            link.classList.add("active");
-        });
+    link.addEventListener("click", function () {
+    navLinks.forEach(l => l.classList.remove("active"));
+    link.classList.add("active");
+    });
     });
 </script>
 
-<!-- FontAwesome for Icons -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+@model IEnumerable<Ghor_Bhubon.Models.Transaction>
+
+
+
+<div id="contentWrapper" style="margin-left: 0; transition: margin-left 0.3s ease;">
+    <h3 class="mt-4 text-primary">Expenses</h3>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>TransactionID</th>
+                    <th>TransactionDate</th>
+                    <th>Amount</th>
+                    <th>UserID</th>
+                    <th>FlatID</th>
+                    <th>LandlordID</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var transaction in Model)
+                {
+                    if(transaction.Status == "Pending")
+                    {
+                        <tr>
+                            <td>@transaction.TransactionID</td>
+                            <td>@transaction.TransactionDate</td>
+                            <td>@transaction.Amount</td>
+                            <td>@transaction.UserID</td>
+                            <td>@transaction.FlatID</td>
+                            <td>@transaction.LandlordID</td>
+
+
+                            <td> <a href="@Url.Action("Valid", "Admin", new { id = transaction.TransactionID })" class="btn btn-success">Valid</a></td>
+
+                            <td>  <a href="@Url.Action("Fraud", "Admin", new { id = transaction.TransactionID })" class="btn btn-danger">Fraud</a></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

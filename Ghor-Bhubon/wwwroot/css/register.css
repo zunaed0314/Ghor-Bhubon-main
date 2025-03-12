@@ -7,7 +7,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Ensure the page takes full height */
+    max-height: 100vh; /* Ensure the page takes full height */
 }
 
 /* Container for the form */
