@@ -164,7 +164,7 @@ namespace Ghor_Bhubon.Controllers
 
             // Update the Flat's availability to "Unavailable"
             flat.Availability = "Unavailable";
-            
+
             // Save the changes to the database
             await _context.SaveChangesAsync();
 
