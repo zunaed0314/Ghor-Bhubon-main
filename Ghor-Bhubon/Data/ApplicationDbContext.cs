@@ -15,6 +15,7 @@ namespace Ghor_Bhubon.Data
         public DbSet<PropertyPending> PropertyPending { get; set; }
         public DbSet<Area> Areas { get; set; }
         public DbSet<City> Cities { get; set; }  // ✅ Add this line
+        public DbSet<Transaction> Transactions { get; set; }  // ✅ Add this line
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

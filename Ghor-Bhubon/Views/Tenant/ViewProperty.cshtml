@@ -1,11 +1,9 @@
-﻿ViewProperty.cshtml:
-@model Ghor_Bhubon.Models.Flat
+﻿@model Ghor_Bhubon.Models.Flat
 
 <h2>Property Details</h2>
 <link rel="stylesheet" href="~/css/PropertyDetails.css">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://maps.gomaps.pro/maps/api/js?key=AlzaSyiePM7XusDCrwGrxl62P8KWn8qr97UeknN&libraries=places"></script>
 @if (Model != null)
@@ -36,9 +34,37 @@
 
         </div>
     </div>
-    <a asp-action="#" asp-route-id="@Model.FlatID" class="btn btn-warning edit-btn">
+    <button class="btn btn-warning edit-btn" onclick="openPopup()">
         <i class="fas fa-edit"></i> Interested
-    </a>
+    </button>
+
+    <!-- Popup Modal -->
+    <!-- Popup Modal -->
+    <div id="popupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            @{
+                int rentAmount = Convert.ToInt32(Model.Rent);
+                double paymentAmount = rentAmount * 0.2;
+            }
+            <p>Please pay <strong>@paymentAmount.ToString("F2") taka</strong> (send money) to 0123456789 and enter your transaction ID:</p>
+
+            <form id="transactionForm" method="post" asp-controller="Transaction" asp-action="SubmitTransaction">
+                <input type="hidden" name="Amount" value="@paymentAmount" />
+                <input type="hidden" name="UserID" value="@User.Identity.Name" /> <!-- UserID, assuming logged-in user has this available -->
+                <input type="hidden" name="FlatID" value="@Model.FlatID" />
+                <input type="hidden" name="LandlordID" value="@Model.UserID" />
+                <input type="hidden" name="TransactionType" value="Admin Fee" />
+                <input type="hidden" name="TransactionDate" value="@DateTime.Now" />
+                <input type="hidden" name="Status" value="Pending" />
+                <input type="hidden" name="Notes" value="Sent" />
+
+                <input type="text" id="transactionId" name="TransactionID" placeholder="Enter Transaction ID" class="input-field" required />
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+
 }
 else
 {
@@ -46,6 +72,24 @@ else
 }
 
 <script>
+    function openPopup() {
+        document.getElementById("popupModal").style.display = "block";
+    }
+
+    function closePopup() {
+        document.getElementById("popupModal").style.display = "none";
+    }
+
+    function submitTransaction() {
+        var transactionId = document.getElementById("transactionId").value;
+        if (transactionId.trim() === "") {
+            alert("Please enter a valid transaction ID.");
+            return;
+        }
+        alert("Transaction ID submitted: " + transactionId);
+        closePopup();
+    }
+
     function changeImage(imageSrc) {
         document.getElementById('selectedImage').src = imageSrc;
     }
@@ -73,3 +117,43 @@ else
 
         window.onload = initMap;
 </script>
+
+
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 300px;
+        text-align: center;
+        border-radius: 10px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .input-field {
+        width: 90%;
+        padding: 8px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+</style>

@@ -194,21 +194,24 @@
                 <div class="row">
                     @foreach (var item in Model)
                     {
-                        <div class="col-md-4 mb-4">
-                            <div class="card property-card">
-                                <img src="@(item.ImagePathList != null && item.ImagePathList.Any() ? item.ImagePathList.First() : "/images/default.jpg")"
-                                     class="card-img-top property-image cardimg" alt="Property Image">
 
-                                <div class="card-body">
-                                    <h5 class="card-title">@item.Description</h5>
-                                    <p class="card-text">@item.City,@item.Area</p>
+                        if(item.Availability == "Available") {
+                            <div class="col-md-4 mb-4">
+                                <div class="card property-card">
+                                    <img src="@(item.ImagePathList != null && item.ImagePathList.Any() ? item.ImagePathList.First() : "/images/default.jpg")"
+                                         class="card-img-top property-image cardimg" alt="Property Image">
 
-                                    <p class="card-text"><strong>Rent:</strong> $@item.Rent</p>
-                                    <p class="card-text"><strong>Rooms:</strong> @item.NumberOfRooms | <strong>Bathrooms:</strong> @item.NumberOfBathrooms</p>
-                                    <a href="@Url.Action("ViewProperty", "Tenant", new { id = item.FlatID })" class="view-more-btn">View More Details</a>
+                                    <div class="card-body">
+                                        <h5 class="card-title">@item.Description</h5>
+                                        <p class="card-text">@item.City,@item.Area</p>
+
+                                        <p class="card-text"><strong>Rent:</strong> $@item.Rent</p>
+                                        <p class="card-text"><strong>Rooms:</strong> @item.NumberOfRooms | <strong>Bathrooms:</strong> @item.NumberOfBathrooms</p>
+                                        <a href="@Url.Action("ViewProperty", "Tenant", new { id = item.FlatID })" class="view-more-btn">View More Details</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     }
                 </div>
             </div>
