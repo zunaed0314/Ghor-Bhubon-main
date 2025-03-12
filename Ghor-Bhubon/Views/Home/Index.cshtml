@@ -1,12 +1,69 @@
 ﻿@{
     ViewData["Title"] = "Home";
 }
+<style>
+    .welcome-container {
+        background: white;
+        background-size: cover;
+        width: 100vw;
+        height: 100vh; /* Full viewport height */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-<div class="welcome-container">
-    <div class="welcome-card">
-        <i class="fas fa-book"></i>
-        <h2>Welcome to GhorBhubon</h2>
-        <a href="@Url.Action("Login", "User")" class="btn btn-primary">Login</a>
-        <a href="@Url.Action("Register", "User")" class="btn btn-success">Register</a>
+    .welcome-card {
+        background: rgba(255, 255, 255, 0.2); /* Transparent White */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(20px); /* Glassmorphism Effect */
+        text-align: center;
+    }
+
+        .welcome-card h2 {
+            color:black;
+        }
+
+        .welcome-card .btn {
+            margin: 5px;
+        }
+
+    .login-btn {
+        background-color: #03fbff; /* Orange */
+        color: black;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: 0.3s;
+    }
+
+        .login-btn:hover {
+            background-color: #02c9bc; /* Darker Orange */
+        }
+
+    .register-btn {
+        background-color: #0ad149; /* Teal */
+        color: black;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: 0.3s;
+    }
+
+        .register-btn:hover {
+            background-color: #09752c; /* Darker Teal */
+        }
+
+</style>
+<body>
+    <div class="welcome-container">
+        <div class="welcome-card">
+            <i class="fas fa-book"></i>
+            <h2>Welcome to GhorBhubon</h2>
+            <a href="@Url.Action("Login", "User")" class="btn btn-primary login-btn ">Login</a>
+            <a href="@Url.Action("Register", "User")" class="btn btn-success register-btn">Register</a>
+        </div>
     </div>
-</div>
+
+</body>
