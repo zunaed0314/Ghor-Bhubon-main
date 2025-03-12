@@ -99,7 +99,7 @@ namespace Ghor_Bhubon.Controllers
                         PdfFilePath = pdfFilePath,
                         City = flat.City,
                         Area = flat.Area,
-                        AvailableFrom=flat.AvailableFrom
+                        AvailableFrom = flat.AvailableFrom
                     };
 
                     _context.PropertyPending.Add(propertyPending);
