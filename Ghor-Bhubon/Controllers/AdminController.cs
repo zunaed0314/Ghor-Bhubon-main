@@ -1,9 +1,11 @@
 using Ghor_Bhubon.Data;
 using Ghor_Bhubon.Models;
+using Ghor_Bhubon.Hubs;  // Add this for the SignalR Hub
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;  // Add this for SignalR
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,11 +16,16 @@ namespace Ghor_Bhubon.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly PropertyService _propertyService;
+        private readonly IHubContext<PendingPostHub> _hubContext;  // Inject the IHubContext
 
-        public AdminController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        // Modify the constructor to accept IHubContext
+        public AdminController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, PropertyService propertyService, IHubContext<PendingPostHub> hubContext)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _propertyService = propertyService;
+            _hubContext = hubContext;  // Assign the hub context
         }
 
         public async Task<IActionResult> AdminDashBoard()
@@ -32,14 +39,8 @@ namespace Ghor_Bhubon.Controllers
             var totalPosts = await _context.Flats.CountAsync();
             var totalPending = await _context.PropertyPending.CountAsync();
             var totalHomesRented = await _context.Flats.CountAsync(h => h.Availability == "Available");
-            /*var totalTransactions = await _context.Transactions.SumAsync(t => t.Amount);*/
-            /*var totalRevenue = await _context.Transactions.Where(t => t.IsAdminFee).SumAsync(t => t.Amount);*/
 
             var newUsersThisMonth = await _context.Users.CountAsync(u => u.CreatedAt.Month == currentMonth && u.CreatedAt.Year == currentYear);
-            /*var newPostsThisMonth = await _context.Posts.CountAsync(p => p.CreatedAt.Month == currentMonth && p.CreatedAt.Year == currentYear);*/
-            /*var housesRentedThisMonth = await _context.Homes.CountAsync(h => h.RentedAt.Month == currentMonth && h.RentedAt.Year == currentYear);*/
-            /*var transactionsThisMonth = await _context.Transactions.Where(t => t.CreatedAt.Month == currentMonth && t.CreatedAt.Year == currentYear).SumAsync(t => t.Amount);*/
-            /*var revenueThisMonth = await _context.Transactions.Where(t => t.IsAdminFee && t.CreatedAt.Month == currentMonth && t.CreatedAt.Year == currentYear).SumAsync(t => t.Amount);*/
 
             var model = new AdminDashboardViewModel
             {
@@ -48,14 +49,7 @@ namespace Ghor_Bhubon.Controllers
                 TotalTenants = totalTenants,
                 TotalPosts = totalPosts,
                 TotalPending = totalPending,
-                /*TotalHomesRented = totalHomesRented,*/
-                /*TotalTransactions = totalTransactions,*/
-                /*TotalRevenue = totalRevenue,*/
                 NewUsersThisMonth = newUsersThisMonth,
-                /*NewPostsThisMonth = newPostsThisMonth,*/
-                /*HousesRentedThisMonth = housesRentedThisMonth,*/
-                /*TransactionsThisMonth = transactionsThisMonth,*/
-                /*RevenueThisMonth = revenueThisMonth*/
             };
 
             return View(model);
@@ -69,7 +63,6 @@ namespace Ghor_Bhubon.Controllers
 
         public async Task<IActionResult> Approve(int id)
         {
-            // Fetch the property details from PropertyPending table by ID
             var pendingProperty = await _context.PropertyPending
                                                  .Where(p => p.ID == id)
                                                  .FirstOrDefaultAsync();
@@ -79,7 +72,6 @@ namespace Ghor_Bhubon.Controllers
                 return NotFound();
             }
 
-            // Create a new Flat object using the PropertyPending data
             var newFlat = new Flat
             {
                 UserID = pendingProperty.UserID,
@@ -88,62 +80,61 @@ namespace Ghor_Bhubon.Controllers
                 Description = pendingProperty.Description,
                 NumberOfRooms = pendingProperty.NumberOfRooms,
                 NumberOfBathrooms = pendingProperty.NumberOfBathrooms,
-                Availability = "Available",  // Set availability as Available when approved
+                Availability = "Available",
                 ImagePaths = pendingProperty.ImagePaths,
                 PdfPath = pendingProperty.PdfFilePath,
                 Latitude = pendingProperty.Latitude,
                 Longitude = pendingProperty.Longitude,
                 City = pendingProperty.City,
                 Area = pendingProperty.Area,
-                AvailableFrom=pendingProperty.AvailableFrom
+                AvailableFrom = pendingProperty.AvailableFrom
             };
 
-            // Add the new Flat to the Flats table
             _context.Flats.Add(newFlat);
             await _context.SaveChangesAsync();
 
-            // Remove the corresponding record from PropertyPending table
             _context.PropertyPending.Remove(pendingProperty);
             await _context.SaveChangesAsync();
 
-            // Redirect to the PropertyPending list page or other page after success
-            return RedirectToAction(nameof(PendingPosts)); // Replace with the actual action to show the list
-        }
+            // Notify all clients that a property has been approved
+            var totalPending = await _context.PropertyPending.CountAsync();
+            await _hubContext.Clients.All.SendAsync("ReceivePendingPostUpdate", totalPending);
 
+            return RedirectToAction(nameof(PendingPosts));
+        }
 
         public async Task<IActionResult> Decline(int id)
         {
-            // Fetch the property details from PropertyPending table by ID
             var pendingProperty = await _context.PropertyPending
                                                  .Where(p => p.ID == id)
                                                  .FirstOrDefaultAsync();
 
             if (pendingProperty == null)
             {
-                return NotFound();  // If the property is not found, return 404
+                return NotFound();
             }
 
-            // Remove the PropertyPending entry from the database
             _context.PropertyPending.Remove(pendingProperty);
             await _context.SaveChangesAsync();
 
-            // Redirect to the list of pending properties or other page after success
-            return RedirectToAction(nameof(PendingPosts));  // Replace with the appropriate action
+            // Notify all clients that a property has been declined
+            var totalPending = await _context.PropertyPending.CountAsync();
+            await _hubContext.Clients.All.SendAsync("ReceivePendingPostUpdate", totalPending);
+
+            return RedirectToAction(nameof(PendingPosts));
         }
 
         public async Task<IActionResult> PropertyDetailsPending(int id)
         {
-            // Fetch the property details from PropertyPending by ID
             var propertyPending = await _context.PropertyPending
                                                  .Where(p => p.ID == id)
                                                  .FirstOrDefaultAsync();
 
             if (propertyPending == null)
             {
-                return NotFound(); // Return 404 if the property is not found
+                return NotFound();
             }
 
-            // Return the PropertyPending details view
             return View(propertyPending);
         }
 
@@ -203,7 +194,6 @@ namespace Ghor_Bhubon.Controllers
             return RedirectToAction("AdminDashBoard");
         }
 
-
         public IActionResult LandlordDashboard(int id)
         {
             var landlord = _context.Users.FirstOrDefault(u => u.UserID == id);
@@ -212,7 +202,6 @@ namespace Ghor_Bhubon.Controllers
                 return NotFound();
             }
 
-            // Fetch flats where UserID (landlord ID) matches the given id
             var flats = _context.Flats.Where(f => f.UserID == id).ToList();
             return View("LandlordProperties", flats);
         }
