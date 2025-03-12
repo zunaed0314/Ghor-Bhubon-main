@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Tenant\**" />
+    <Content Remove="Views\Tenant\**" />
+    <EmbeddedResource Remove="Views\Tenant\**" />
+    <None Remove="Views\Tenant\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Controllers\AccountController.cs" />
   </ItemGroup>
 
