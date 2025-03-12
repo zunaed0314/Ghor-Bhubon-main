@@ -1,4 +1,5 @@
-﻿<style>
+﻿
+<style>
     .container {
         max-height: none;
         overflow: visible;
@@ -95,8 +96,8 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    .cardimg {
-        object-fit: contain;
+    .cardimg{
+        object-fit:contain;
     }
 </style>
 @model List<Ghor_Bhubon.Models.Flat>
@@ -160,60 +161,60 @@
     <!-- Main Content -->
 
 
-    <div class="container mt-5">
-        <div class="row mb-4">
-            <div class="col-lg-3">
-                <div class="filters">
-                    <h5>Filters</h5>
-                    <div class="mb-3">
-                        <label for="locationFilter" class="form-label">Location (City and Area)</label>
-                        <input type="text" id="locationFilter" class="form-control" placeholder="Enter location">
-                    </div>
-                    <div class="mb-3">
-                        <label for="priceFilter" class="form-label">Price Range</label>
-                        <select id="priceFilter" class="form-select">
-                            <option value="">All</option>
-                            <option value="0-1000">$0 - $1,000</option>
-                            <option value="1000-2000">$1,000 - $2,000</option>
-                            <option value="2000+">$2,000+</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="typeFilter" class="form-label">Property Type</label>
-                        <select id="typeFilter" class="form-select">
-                            <option value="">All</option>
-                            <option value="apartment">Apartment</option>
-                            <option value="house">House</option>
-                            <option value="studio">Studio</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-primary w-100" onclick="applyFilters()">Apply Filters</button>
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-lg-3">
+            <div class="filters">
+                <h5>Filters</h5>
+                <div class="mb-3">
+                    <label for="locationFilter" class="form-label">Location (City and Area)</label>
+                    <input type="text" id="locationFilter" class="form-control" placeholder="Enter location">
                 </div>
+                <div class="mb-3">
+                    <label for="priceFilter" class="form-label">Price Range</label>
+                    <select id="priceFilter" class="form-select">
+                        <option value="">All</option>
+                        <option value="0-1000">$0 - $1,000</option>
+                        <option value="1000-2000">$1,000 - $2,000</option>
+                        <option value="2000+">$2,000+</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="typeFilter" class="form-label">Property Type</label>
+                    <select id="typeFilter" class="form-select">
+                        <option value="">All</option>
+                        <option value="apartment">Apartment</option>
+                        <option value="house">House</option>
+                        <option value="studio">Studio</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary w-100" onclick="applyFilters()">Apply Filters</button>
             </div>
-            <div class="col-lg-9">
-                <div class="row">
-                    @foreach (var item in Model)
-                    {
-                        <div class="col-md-4 mb-4">
-                            <div class="card property-card">
+        </div>
+        <div class="col-lg-9">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card property-card">
                                 <img src="@(item.ImagePathList != null && item.ImagePathList.Any() ? item.ImagePathList.First() : "/images/default.jpg")"
                                      class="card-img-top property-image cardimg" alt="Property Image">
 
-                                <div class="card-body">
-                                    <h5 class="card-title">@item.Description</h5>
-                                    <p class="card-text">@item.City,@item.Area</p>
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Description</h5>
+                                <p class="card-text">@item.City,@item.Area</p>
 
-                                    <p class="card-text"><strong>Rent:</strong> $@item.Rent</p>
-                                    <p class="card-text"><strong>Rooms:</strong> @item.NumberOfRooms | <strong>Bathrooms:</strong> @item.NumberOfBathrooms</p>
-                                    <a href="@Url.Action("ViewProperty", "Tenant", new { id = item.FlatID })" class="view-more-btn">View More Details</a>
-                                </div>
+                                <p class="card-text"><strong>Rent:</strong> $@item.Rent</p>
+                                <p class="card-text"><strong>Rooms:</strong> @item.NumberOfRooms | <strong>Bathrooms:</strong> @item.NumberOfBathrooms</p>
+                                <a href="@Url.Action("ViewProperty", "Tenant", new { id = item.FlatID })" class="view-more-btn">View More Details</a>
                             </div>
                         </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
+</div>
 
     <!-- Footer -->
     <footer>
@@ -280,7 +281,7 @@
     </script>
 
 
+    
 
-
-
-</body>
+  
+</body> 
