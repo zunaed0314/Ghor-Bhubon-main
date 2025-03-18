@@ -18,14 +18,16 @@ namespace Ghor_Bhubon.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly PropertyService _propertyService;
         private readonly IHubContext<PendingPostHub> _hubContext;  // Inject the IHubContext
+        private readonly IHubContext<PropertyHub> _hubContext2;
 
         // Modify the constructor to accept IHubContext
-        public AdminController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, PropertyService propertyService, IHubContext<PendingPostHub> hubContext)
+        public AdminController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, PropertyService propertyService, IHubContext<PendingPostHub> hubContext, IHubContext<PropertyHub> hubContext2)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
             _propertyService = propertyService;
             _hubContext = hubContext;  // Assign the hub context
+            _hubContext2 = hubContext2;
         }
 
         public async Task<IActionResult> AdminDashBoard()
@@ -113,6 +115,8 @@ namespace Ghor_Bhubon.Controllers
             var totalPending = await _context.PropertyPending.CountAsync();
             await _hubContext.Clients.All.SendAsync("ReceivePendingPostUpdate", totalPending);
 
+            await _hubContext2.Clients.All.SendAsync("NewPropertyAdded", newFlat);
+
             return RedirectToAction(nameof(PendingPosts));
         }
 
@@ -160,7 +164,7 @@ namespace Ghor_Bhubon.Controllers
 
             // Update the Flat's availability to "Unavailable"
             flat.Availability = "Unavailable";
-            
+
             // Save the changes to the database
             await _context.SaveChangesAsync();
 

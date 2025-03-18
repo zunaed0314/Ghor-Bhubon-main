@@ -71,3 +71,8 @@
 .delete-btn:hover {
     background-color: #cc0000;
 }
+
+.card-buttons{
+    display: flex;
+    flex-direction:row;
+}
