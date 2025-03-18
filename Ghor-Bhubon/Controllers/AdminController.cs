@@ -39,14 +39,14 @@ namespace Ghor_Bhubon.Controllers
             var totalPosts = await _context.Flats.CountAsync();
             var totalPending = await _context.PropertyPending.CountAsync();
             var totalHomesRented = await _context.Flats.CountAsync(h => h.Availability == "Available");
-            /*var totalTransactions = await _context.Transactions.SumAsync(t => t.Amount);*/
-            /*var totalRevenue = await _context.Transactions.Where(t => t.IsAdminFee).SumAsync(t => t.Amount);*/
+            var totalTransactions = await _context.Transactions.Where(t => t.Status == "valid").SumAsync(t => t.Amount);
+            var transactions = await _context.Transactions.SumAsync(t => t.Amount);
 
             var newUsersThisMonth = await _context.Users.CountAsync(u => u.CreatedAt.Month == currentMonth && u.CreatedAt.Year == currentYear);
             /*var newPostsThisMonth = await _context.Posts.CountAsync(p => p.CreatedAt.Month == currentMonth && p.CreatedAt.Year == currentYear);*/
             /*var housesRentedThisMonth = await _context.Homes.CountAsync(h => h.RentedAt.Month == currentMonth && h.RentedAt.Year == currentYear);*/
-            /*var transactionsThisMonth = await _context.Transactions.Where(t => t.CreatedAt.Month == currentMonth && t.CreatedAt.Year == currentYear).SumAsync(t => t.Amount);*/
-            /*var revenueThisMonth = await _context.Transactions.Where(t => t.IsAdminFee && t.CreatedAt.Month == currentMonth && t.CreatedAt.Year == currentYear).SumAsync(t => t.Amount);*/
+            var transactionsThisMonth = await _context.Transactions.Where(t => t.TransactionDate.Month == currentMonth && t.TransactionDate.Year == currentYear && t.Status == "valid").SumAsync(t => t.Amount);
+            var revenueThisMonth = await _context.Transactions.Where(t => t.Amount > 0 && t.TransactionDate.Month == currentMonth && t.TransactionDate.Year == currentYear && t.Status == "valid").SumAsync(t => t.Amount);
 
             var model = new AdminDashboardViewModel
             {
@@ -56,13 +56,13 @@ namespace Ghor_Bhubon.Controllers
                 TotalPosts = totalPosts,
                 TotalPending = totalPending,
                 /*TotalHomesRented = totalHomesRented,*/
-                /*TotalTransactions = totalTransactions,*/
+                TotalTransactions = totalTransactions,
                 /*TotalRevenue = totalRevenue,*/
                 NewUsersThisMonth = newUsersThisMonth,
                 /*NewPostsThisMonth = newPostsThisMonth,*/
                 /*HousesRentedThisMonth = housesRentedThisMonth,*/
-                /*TransactionsThisMonth = transactionsThisMonth,*/
-                /*RevenueThisMonth = revenueThisMonth*/
+                TransactionsThisMonth = transactionsThisMonth,
+                RevenueThisMonth = revenueThisMonth
             };
 
             return View(model);
